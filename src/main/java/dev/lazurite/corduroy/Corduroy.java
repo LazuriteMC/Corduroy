@@ -2,6 +2,7 @@ package dev.lazurite.corduroy;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.camera.CameraBuilder;
+import dev.lazurite.corduroy.api.camera.CameraType;
 import dev.lazurite.corduroy.api.event.CameraEvents;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -25,7 +26,7 @@ public class Corduroy implements ClientModInitializer {
         testKeybindRegister();
 
         testCamera = CameraBuilder
-                .createStationaryCamera()
+                .create(CameraType.STATIONARY)
                 .setPosition(0, 10, 0)
                 .build();
     }
