@@ -5,8 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
   "client": [
+    "access.CameraAccess",
     "access.GameRendererAccess",
-    "CameraMixin",
     "GameRendererMixin",
     "WorldRendererMixin"
   ],
