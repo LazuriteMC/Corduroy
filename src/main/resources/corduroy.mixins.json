@@ -4,7 +4,12 @@
   "package": "dev.lazurite.corduroy.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
-  "client": [],
+  "client": [
+    "access.GameRendererAccess",
+    "CameraMixin",
+    "GameRendererMixin",
+    "WorldRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

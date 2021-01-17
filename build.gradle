@@ -7,58 +7,38 @@ minecraft {
 	accessWidener "src/main/resources/corduroy.accesswidener"
 }
 
-subprojects {
-	apply plugin: 'fabric-loom'
-	archivesBaseName = rootProject.archives_base_name + "-" + project.name
-	group = rootProject.maven_group + "." + rootProject.archives_base_name
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-	repositories {
-		maven { url 'https://jitpack.io' }
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+dependencies {
+	// Minecraft + Yarn
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+	// Fabric Loader + Fabric API
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
+		expand "version": project.version
 	}
 
-	dependencies {
-		compile rootProject.sourceSets.main.output
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-		modImplementation "com.github.joaoh1:OkZoomer:4.0.0-alpha.4.1.16.1"
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
 	}
 }
 
-allprojects {
-	apply plugin: 'fabric-loom'
-
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-
-	archivesBaseName = project.archives_base_name
-	version = project.mod_version
-	group = project.maven_group
-
-	dependencies {
-		// Minecraft + Yarn
-		minecraft "com.mojang:minecraft:${project.minecraft_version}"
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
-		// Fabric Loader + Fabric API
-		modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	}
-
-	processResources {
-		inputs.property "version", project.version
-
-		from(sourceSets.main.resources.srcDirs) {
-			include "fabric.mod.json"
-			expand "version": project.version
-		}
-
-		from(sourceSets.main.resources.srcDirs) {
-			exclude "fabric.mod.json"
-		}
-	}
-
-	tasks.withType(JavaCompile) {
-		options.encoding = "UTF-8"
-	}
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
