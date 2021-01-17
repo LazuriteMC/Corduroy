@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "corduroy",
+  "version": "${version}",
+
+  "name": "Corduroy",
+  "description": "",
+  "authors": [ "The Lazurite Team" ],
+  "contact": {
+    "homepage": "https://lazurite.dev",
+    "sources": "https://github.com/lazuritemc/corduroy",
+    "issues": "https://github.com/lazuritemc/corduroy/issues"
+  },
+
+  "license": "MIT",
+  "icon": "assets/corduroy/icon.png",
+  "accessWidener": "corduroy.accesswidener",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [ "dev.lazurite.corduroy.Corduroy" ]
+  },
+
+  "mixins": [ "corduroy.mixins.json" ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+
+  "suggests": {
+    "flamingo": "*"
+  }
+}
