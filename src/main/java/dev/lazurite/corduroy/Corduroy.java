@@ -1,6 +1,6 @@
 package dev.lazurite.corduroy;
 
-import dev.lazurite.corduroy.api.GameView;
+import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.camera.CameraBuilder;
 import dev.lazurite.corduroy.api.event.CameraEvents;
 import net.fabricmc.api.ClientModInitializer;
@@ -32,11 +32,13 @@ public class Corduroy implements ClientModInitializer {
 
     public static void testKeybindCallback(MinecraftClient client) {
         if (testKey.wasPressed()) {
-            if (GameView.INSTANCE.getCamera().equals(testCamera)) {
-                GameView.INSTANCE.setCamera(firstCamera);
+            if (ViewStack.INSTANCE.peek().equals(testCamera)) {
+                ViewStack.INSTANCE.pop();
+                ViewStack.INSTANCE.push(firstCamera);
                 System.out.println("FIRST CAMERA");
             } else {
-                GameView.INSTANCE.setCamera(testCamera);
+                ViewStack.INSTANCE.pop();
+                ViewStack.INSTANCE.push(testCamera);
                 System.out.println("TEST CAMERA");
             }
         }
