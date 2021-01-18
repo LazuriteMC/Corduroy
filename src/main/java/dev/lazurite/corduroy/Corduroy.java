@@ -25,8 +25,7 @@ public class Corduroy implements ClientModInitializer {
         CameraEvents.END_CAMERA_SETUP.register(camera -> Corduroy.firstCamera = camera);
         testKeybindRegister();
 
-        testCamera = CameraBuilder
-                .create(CameraType.STATIONARY)
+        testCamera = CameraBuilder.create(CameraType.STATIONARY)
                 .setPosition(0, 10, 0)
                 .build();
     }
@@ -36,11 +35,9 @@ public class Corduroy implements ClientModInitializer {
             if (ViewStack.INSTANCE.peek().equals(testCamera)) {
                 ViewStack.INSTANCE.pop();
                 ViewStack.INSTANCE.push(firstCamera);
-                System.out.println("FIRST CAMERA");
             } else {
                 ViewStack.INSTANCE.pop();
                 ViewStack.INSTANCE.push(testCamera);
-                System.out.println("TEST CAMERA");
             }
         }
     }

@@ -18,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GameRendererMixin {
     @Shadow @Final private Camera camera;
 
+    @Shadow public boolean renderHand;
+
     @Inject(method = "<init>", at = @At("RETURN"))
     public void init(MinecraftClient client, ResourceManager resourceManager, BufferBuilderStorage bufferBuilderStorage, CallbackInfo info) {
         ViewStack.init(camera);
