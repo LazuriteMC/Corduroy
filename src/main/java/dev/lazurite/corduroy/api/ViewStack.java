@@ -1,5 +1,6 @@
 package dev.lazurite.corduroy.api;
 
+import dev.lazurite.corduroy.api.event.CameraEvents;
 import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
@@ -19,17 +20,22 @@ public final class ViewStack extends Stack<Camera> {
 
     @Override
     public Camera push(Camera camera) {
+        super.push(camera);
+        CameraEvents.VIEW_STACK_PUSH.invoker().onPush(camera);
+
         if (MinecraftClient.getInstance().gameRenderer != null) {
             ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
         }
 
-        return super.push(camera);
+        return camera;
     }
 
     @Override
     public Camera pop() {
-        Camera pop = super.pop();
-        ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(pop);
-        return pop;
+        Camera camera = super.pop();
+        CameraEvents.VIEW_STACK_POP.invoker().onPop(camera);
+
+        ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
+        return camera;
     }
 }

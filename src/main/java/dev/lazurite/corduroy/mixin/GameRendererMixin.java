@@ -1,7 +1,6 @@
 package dev.lazurite.corduroy.mixin;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.event.CameraEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
@@ -18,11 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GameRendererMixin {
     @Shadow @Final private Camera camera;
 
-    @Shadow public boolean renderHand;
-
     @Inject(method = "<init>", at = @At("RETURN"))
     public void init(MinecraftClient client, ResourceManager resourceManager, BufferBuilderStorage bufferBuilderStorage, CallbackInfo info) {
         ViewStack.init(camera);
-        CameraEvents.END_CAMERA_SETUP.invoker().onEndCameraSetup(camera);
     }
 }

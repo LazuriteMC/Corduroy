@@ -5,22 +5,28 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.BlockView;
 
-public abstract class BetterCamera extends Camera {
+public abstract class CorduroyCamera extends Camera {
     protected final MinecraftClient client;
     private boolean shouldRenderPlayer = false;
     private boolean shouldRenderHand = true;
     private double fov;
 
-    public BetterCamera() {
+    public CorduroyCamera() {
         super();
         this.client = MinecraftClient.getInstance();
     }
 
+    public void tick() {
+        client.gameRenderer.renderHand = shouldRenderHand;
+    }
+
     @Override
     public void update(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta) {
-        client.gameRenderer.renderHand = shouldRenderHand;
+        this.tick();
 //        super.update(area, focusedEntity, thirdPerson, inverseView, tickDelta);
     }
+
+    public abstract Entity getFocusedEntity();
 
     public void setShouldRenderPlayer(boolean shouldRenderPlayer) {
         this.shouldRenderPlayer = shouldRenderPlayer;

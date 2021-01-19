@@ -1,7 +1,7 @@
 package dev.lazurite.corduroy.impl.camera.builder;
 
 import dev.lazurite.corduroy.api.camera.CameraBuilder;
-import dev.lazurite.corduroy.impl.camera.StationaryCamera;
+import dev.lazurite.corduroy.impl.camera.DetachedCamera;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.Quaternion;
@@ -43,6 +43,6 @@ public class StationaryCameraBuilder implements CameraBuilder {
 
     @Override
     public Camera build() {
-        return new StationaryCamera(position, rotation);
+        return new DetachedCamera(position, rotation);
     }
 }

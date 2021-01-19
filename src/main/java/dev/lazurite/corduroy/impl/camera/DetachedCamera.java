@@ -5,10 +5,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 
-public class StationaryCamera extends BetterCamera {
+public class DetachedCamera extends CorduroyCamera {
     private final DummyEntity dummyEntity;
 
-    public StationaryCamera(Vec3d position, Quaternion rotation) {
+    public DetachedCamera(Vec3d position, Quaternion rotation) {
         super();
         this.dummyEntity = new DummyEntity(client.world);
         this.setPos(position);
