@@ -1,5 +1,6 @@
 package dev.lazurite.corduroy.impl.camera;
 
+import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
@@ -17,7 +18,7 @@ public abstract class BaseCamera extends Camera {
     }
 
     public void tick() {
-        client.gameRenderer.renderHand = renderHand;
+        ((GameRendererAccess) client.gameRenderer).setRenderHand(renderHand);
     }
 
     @Override

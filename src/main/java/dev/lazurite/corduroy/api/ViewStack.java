@@ -32,10 +32,17 @@ public final class ViewStack extends Stack<Camera> {
 
     @Override
     public Camera pop() {
-        Camera camera = super.pop();
-        CameraEvents.VIEW_STACK_POP.invoker().onPop(camera);
+        Camera camera;
 
-        ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
+        if (size() > 1) {
+            camera = super.pop();
+            CameraEvents.VIEW_STACK_POP.invoker().onPop(camera);
+
+            ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
+        } else {
+            camera = peek();
+        }
+
         return camera;
     }
 }
