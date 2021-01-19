@@ -3,10 +3,6 @@ plugins {
 	id 'maven-publish'
 }
 
-minecraft {
-	accessWidener "src/main/resources/corduroy.accesswidener"
-}
-
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 

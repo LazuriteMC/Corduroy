@@ -5,19 +5,19 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.BlockView;
 
-public abstract class CorduroyCamera extends Camera {
+public abstract class BaseCamera extends Camera {
     protected final MinecraftClient client;
-    private boolean shouldRenderPlayer = false;
-    private boolean shouldRenderHand = true;
+    private boolean renderPlayer = false;
+    private boolean renderHand = true;
     private double fov;
 
-    public CorduroyCamera() {
+    public BaseCamera() {
         super();
         this.client = MinecraftClient.getInstance();
     }
 
     public void tick() {
-        client.gameRenderer.renderHand = shouldRenderHand;
+        client.gameRenderer.renderHand = renderHand;
     }
 
     @Override
@@ -28,19 +28,19 @@ public abstract class CorduroyCamera extends Camera {
 
     public abstract Entity getFocusedEntity();
 
-    public void setShouldRenderPlayer(boolean shouldRenderPlayer) {
-        this.shouldRenderPlayer = shouldRenderPlayer;
+    public void setRenderPlayer(boolean shouldRenderPlayer) {
+        this.renderPlayer = shouldRenderPlayer;
     }
 
-    public void setShouldRenderHand(boolean shouldRenderHand) {
-        this.shouldRenderHand = shouldRenderHand;
+    public void setRenderHand(boolean renderHand) {
+        this.renderHand = renderHand;
     }
 
     public boolean shouldRenderPlayer() {
-        return this.shouldRenderPlayer;
+        return this.renderPlayer;
     }
 
     public boolean shouldRenderHand() {
-        return this.shouldRenderHand;
+        return this.renderHand;
     }
 }

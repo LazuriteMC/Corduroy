@@ -1,8 +1,8 @@
 package dev.lazurite.corduroy;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.camera.CameraBuilder;
-import dev.lazurite.corduroy.api.camera.CameraType;
+import dev.lazurite.corduroy.api.camera.builder.CameraBuilder;
+import dev.lazurite.corduroy.api.camera.builder.CameraType;
 import dev.lazurite.corduroy.api.event.CameraEvents;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

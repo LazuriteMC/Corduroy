@@ -1,6 +1,6 @@
 package dev.lazurite.corduroy.mixin;
 
-import dev.lazurite.corduroy.impl.camera.CorduroyCamera;
+import dev.lazurite.corduroy.impl.camera.BaseCamera;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.WorldRenderer;
@@ -24,8 +24,8 @@ public class WorldRendererMixin {
             )
     )
     public Entity getFocusedEntity(Camera camera) {
-        if (client.gameRenderer.getCamera() instanceof CorduroyCamera) {
-            if (((CorduroyCamera) client.gameRenderer.getCamera()).shouldRenderPlayer()) {
+        if (client.gameRenderer.getCamera() instanceof BaseCamera) {
+            if (((BaseCamera) client.gameRenderer.getCamera()).shouldRenderPlayer()) {
                 return client.player;
             }
         }
