@@ -2,6 +2,7 @@ package dev.lazurite.corduroy.mixin;
 
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.impl.ViewCamera;
+import dev.lazurite.corduroy.impl.math.QuaternionHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -34,30 +35,32 @@ public class WorldRendererMixin {
     public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
         if (camera instanceof ViewCamera) {
             View view = ((ViewCamera) camera).getView();
-            matrices.multiply(view.getOrientation());
+            matrices.multiply(QuaternionHelper.slerp(view.getPreviousOrientation(), view.getOrientation(), tickDelta));
         }
     }
 
-    /**
-     * This allows for the player to render whenever the current camera specifies.
-     * @see ViewCamera
-     * @see View
-     */
-    @Redirect(
-        method = "render",
-        at = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/render/Camera;getFocusedEntity()Lnet/minecraft/entity/Entity;",
-                ordinal = 3
-        )
-    )
-    public Entity getFocusedEntity(Camera camera) {
-        if (camera instanceof ViewCamera) {
-            if (((ViewCamera) camera).getView().shouldRenderPlayer()) {
-                return client.player;
-            }
-        }
-
-        return camera.getFocusedEntity();
-    }
+//    /**
+//     * This allows for the player to render whenever the current camera specifies.
+//     * @see ViewCamera
+//     * @see View
+//     */
+//    @Redirect(
+//        method = "render",
+//        at = @At(
+//                value = "INVOKE",
+//                target = "Lnet/minecraft/client/render/Camera;getFocusedEntity()Lnet/minecraft/entity/Entity;",
+//                ordinal = 3
+//        )
+//    )
+//    public Entity getFocusedEntity(Camera camera) {
+//        if (camera instanceof ViewCamera) {
+//            if (((ViewCamera) camera).getView().shouldRenderPlayer()) {
+//                System.out.println("RENDER PLAYER");
+//                return client.player;
+//            }
+//        }
+//
+//        System.out.println("DONT RENDER PLAYER");
+//        return camera.getFocusedEntity();
+//    }
 }

@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
@@ -21,7 +22,12 @@ public class ChangeViewKeybinding {
             if (ViewStack.getInstance().peek() instanceof LineView) {
                 ViewStack.getInstance().pop();
             } else {
-                ViewStack.getInstance().push(new LineView(new Vec3d(0, 5, 0), new Vec3d(0, 5, 20), 400));
+                ViewStack.getInstance().push(new LineView(
+                        new Vec3d(0, 5, 0),
+                        new Vec3d(0, 5, 20),
+                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(0),
+                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(90),
+                        400));
             }
         }
     }

@@ -3,6 +3,7 @@ package dev.lazurite.corduroy.impl.views;
 import dev.lazurite.corduroy.api.view.FreeView;
 import dev.lazurite.corduroy.api.view.special.TemporaryView;
 import dev.lazurite.corduroy.api.view.special.TickableView;
+import dev.lazurite.corduroy.impl.math.QuaternionHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.math.MathHelper;
@@ -65,6 +66,7 @@ public class LineView implements FreeView, TickableView, TemporaryView {
         double y = MathHelper.lerp(delta, startPosition.y, endPosition.y);
         double z = MathHelper.lerp(delta, startPosition.z, endPosition.z);
         setPosition(new Vec3d(x, y, z));
+        setOrientation(QuaternionHelper.slerp(startOrientation, endOrientation, delta));
     }
 
     @Override
