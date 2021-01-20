@@ -9,6 +9,7 @@ import java.util.Stack;
 
 public final class ViewStack extends Stack<Camera> {
     private static ViewStack instance;
+    private boolean lock;
 
     private ViewStack() {
     }
@@ -22,13 +23,27 @@ public final class ViewStack extends Stack<Camera> {
         instance.push(camera);
     }
 
+    public void lock() {
+        this.lock = true;
+    }
+
+    public void unlock() {
+        this.lock = false;
+    }
+
+    public boolean isLocked() {
+        return this.lock;
+    }
+
     @Override
     public Camera push(Camera camera) {
-        super.push(camera);
-        CameraEvents.VIEW_STACK_PUSH.invoker().onPush(camera);
+        if (!isLocked()) {
+            super.push(camera);
+            CameraEvents.VIEW_STACK_PUSH.invoker().onPush(camera);
 
-        if (MinecraftClient.getInstance().gameRenderer != null) {
-            ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
+            if (MinecraftClient.getInstance().gameRenderer != null) {
+                ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
+            }
         }
 
         return camera;
@@ -38,7 +53,7 @@ public final class ViewStack extends Stack<Camera> {
     public Camera pop() {
         Camera camera;
 
-        if (size() > 1) {
+        if (size() > 1 && !isLocked()) {
             camera = super.pop();
             CameraEvents.VIEW_STACK_POP.invoker().onPop(camera);
 
