@@ -7,7 +7,6 @@
   "client": [
     "access.CameraAccess",
     "access.GameRendererAccess",
-    "CameraMixin",
     "GameRendererMixin",
     "WorldRendererMixin"
   ],

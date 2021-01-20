@@ -4,11 +4,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
-import net.minecraft.world.World;
 
 public class DummyEntity extends Entity {
-    public DummyEntity(World world) {
-        super(EntityType.EGG, world);
+    public DummyEntity() {
+        super(EntityType.EGG, null);
     }
 
     @Override

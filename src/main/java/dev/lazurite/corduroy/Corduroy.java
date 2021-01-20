@@ -1,43 +1,34 @@
 package dev.lazurite.corduroy;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.camera.builder.CameraBuilder;
-import dev.lazurite.corduroy.api.camera.builder.CameraType;
-import dev.lazurite.corduroy.api.event.CameraEvents;
+import dev.lazurite.corduroy.impl.camera.StationaryCamera;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 public class Corduroy implements ClientModInitializer {
     public static final String MODID = "corduroy";
 
     private static KeyBinding testKey;
-    public static Camera firstCamera;
-    private static Camera testCamera;
 
     @Override
     public void onInitializeClient() {
-        CameraEvents.END_CAMERA_SETUP.register(camera -> Corduroy.firstCamera = camera);
         testKeybindRegister();
-
-        testCamera = CameraBuilder.create(CameraType.STATIONARY)
-                .setPosition(0, 10, 0)
-                .build();
     }
 
     public static void testKeybindCallback(MinecraftClient client) {
         if (testKey.wasPressed()) {
-            if (ViewStack.INSTANCE.peek().equals(testCamera)) {
-                ViewStack.INSTANCE.pop();
-                ViewStack.INSTANCE.push(firstCamera);
+            System.out.println("CHANGE CAMERA");
+            if (ViewStack.getInstance().peek() instanceof StationaryCamera) {
+                ViewStack.getInstance().pop();
             } else {
-                ViewStack.INSTANCE.pop();
-                ViewStack.INSTANCE.push(testCamera);
+                ViewStack.getInstance().push(new StationaryCamera(new Vec3d(0, 5, 0), Quaternion.IDENTITY));
             }
         }
     }

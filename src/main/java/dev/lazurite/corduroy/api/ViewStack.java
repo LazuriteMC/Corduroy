@@ -8,14 +8,18 @@ import net.minecraft.client.render.Camera;
 import java.util.Stack;
 
 public final class ViewStack extends Stack<Camera> {
-    public static ViewStack INSTANCE;
+    private static ViewStack instance;
 
     private ViewStack() {
     }
 
-    public static void init(Camera camera) {
-        INSTANCE = new ViewStack();
-        INSTANCE.push(camera);
+    public static ViewStack getInstance() {
+        return instance;
+    }
+
+    public static void create(Camera camera) {
+        instance = new ViewStack();
+        instance.push(camera);
     }
 
     @Override
