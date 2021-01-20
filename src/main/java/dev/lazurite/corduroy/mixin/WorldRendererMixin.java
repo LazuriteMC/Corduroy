@@ -1,8 +1,10 @@
 package dev.lazurite.corduroy.mixin;
 
+import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.impl.ViewCamera;
 import dev.lazurite.corduroy.impl.math.QuaternionHelper;
+import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -33,9 +35,13 @@ public class WorldRendererMixin {
      */
     @Inject(method = "render", at = @At("HEAD"))
     public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
-        if (camera instanceof ViewCamera) {
-            View view = ((ViewCamera) camera).getView();
+        View view = ViewStack.getInstance().peek();
+
+        if (view != null) {
             matrices.multiply(QuaternionHelper.slerp(view.getPreviousOrientation(), view.getOrientation(), tickDelta));
+            ((GameRendererAccess) client.gameRenderer).setRenderHand(view.shouldRenderHand());
+        } else {
+            ((GameRendererAccess) client.gameRenderer).setRenderHand(true);
         }
     }
 

@@ -4,7 +4,6 @@ import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.special.TemporaryView;
 import dev.lazurite.corduroy.api.view.special.TickableView;
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -24,9 +23,6 @@ public class ClientWorldMixin {
     @Inject(method = "tickEntities", at = @At("HEAD"))
     public void tickViews(CallbackInfo info) {
         View view = ViewStack.getInstance().peek();
-
-        /* Whether or not the player's hand should be rendered */
-        ((GameRendererAccess) client.gameRenderer).setRenderHand(view == null || view.shouldRenderHand());
 
         /* Temporary-View Aging */
         if (view instanceof TemporaryView) {
