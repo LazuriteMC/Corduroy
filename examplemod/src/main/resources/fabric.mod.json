@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "examplemod",
+  "version": "${version}",
+
+  "name": "Corduroy Example Mod",
+  "description": "An example mod for Corduroy",
+  "authors": [ "The Lazurite Team" ],
+
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "dev.lazurite.rayon.examplemod.ExampleMod"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+
+  "suggests": {
+    "flamingo": "*"
+  }
+}

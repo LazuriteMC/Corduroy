@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Corduroy",
-  "description": "",
+  "description": "Advanced camera manipulation for Fabric.",
   "authors": [ "The Lazurite Team" ],
   "contact": {
     "homepage": "https://lazurite.dev",
@@ -14,12 +14,7 @@
 
   "license": "MIT",
   "icon": "assets/corduroy/icon.png",
-
   "environment": "*",
-  "entrypoints": {
-    "client": [ "dev.lazurite.corduroy.Corduroy" ]
-  },
-
   "mixins": [ "corduroy.mixins.json" ],
 
   "depends": {

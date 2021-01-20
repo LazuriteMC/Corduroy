@@ -1,9 +1,7 @@
-package dev.lazurite.corduroy;
+package dev.lazurite.rayon.examplemod;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.impl.views.LineView;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -15,18 +13,11 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
-public class Corduroy implements ClientModInitializer {
-    public static final String MODID = "corduroy";
+public class ChangeViewKeybinding {
+    private static KeyBinding key;
 
-    private static KeyBinding testKey;
-
-    @Override
-    public void onInitializeClient() {
-        testKeybindRegister();
-    }
-
-    public static void testKeybindCallback(MinecraftClient client) {
-        if (testKey.wasPressed()) {
+    public static void callback(MinecraftClient client) {
+        if (key.wasPressed()) {
             if (ViewStack.getInstance().peek() instanceof LineView) {
                 ViewStack.getInstance().pop();
             } else {
@@ -35,15 +26,15 @@ public class Corduroy implements ClientModInitializer {
         }
     }
 
-    public static void testKeybindRegister() {
-        testKey = new KeyBinding(
-                "key." + MODID + ".test",
+    public static void register() {
+        key = new KeyBinding(
+                "key.corduroy.change_view",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_M,
-                "category." + MODID + ".keys"
+                "key.categories.gameplay"
         );
 
-        KeyBindingHelper.registerKeyBinding(testKey);
-        ClientTickEvents.END_CLIENT_TICK.register(Corduroy::testKeybindCallback);
+        KeyBindingHelper.registerKeyBinding(key);
+        ClientTickEvents.END_CLIENT_TICK.register(ChangeViewKeybinding::callback);
     }
 }
