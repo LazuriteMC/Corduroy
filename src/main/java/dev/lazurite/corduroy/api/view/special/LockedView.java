@@ -1,8 +1,8 @@
-package dev.lazurite.corduroy.api.camera;
+package dev.lazurite.corduroy.api.view.special;
 
 import dev.lazurite.corduroy.api.ViewStack;
 
-public interface Locked {
+public interface LockedView {
     default void unlock() {
         ViewStack.getInstance().unlock();
     }

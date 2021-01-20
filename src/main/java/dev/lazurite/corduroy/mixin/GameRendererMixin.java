@@ -1,6 +1,8 @@
 package dev.lazurite.corduroy.mixin;
 
 import dev.lazurite.corduroy.api.ViewStack;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
+@Environment(EnvType.CLIENT)
 public class GameRendererMixin {
     @Shadow @Final private Camera camera;
 

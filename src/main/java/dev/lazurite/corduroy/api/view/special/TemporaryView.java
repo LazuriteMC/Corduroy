@@ -1,13 +1,12 @@
-package dev.lazurite.corduroy.api.camera;
+package dev.lazurite.corduroy.api.view.special;
 
 import dev.lazurite.corduroy.api.ViewStack;
 
-public interface Temporary {
+public interface TemporaryView {
     default void finish() {
         ViewStack.getInstance().pop();
     }
 
-    void setLifeSpan(int ticks);
     int getLifeSpan();
     void setAge(int age);
     int getAge();
