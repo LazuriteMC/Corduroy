@@ -3,6 +3,7 @@ package dev.lazurite.corduroy.impl;
 import dev.lazurite.corduroy.api.view.View;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -26,5 +27,10 @@ public class ViewCamera extends Camera {
 
     public View getView() {
         return this.view;
+    }
+
+    @Override
+    public Entity getFocusedEntity() {
+        return MinecraftClient.getInstance().player;
     }
 }
