@@ -1,5 +1,6 @@
 package dev.lazurite.corduroy.api;
 
+import dev.lazurite.corduroy.api.camera.Locked;
 import dev.lazurite.corduroy.api.event.CameraEvents;
 import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.minecraft.client.MinecraftClient;
@@ -41,6 +42,10 @@ public final class ViewStack extends Stack<Camera> {
             super.push(camera);
             CameraEvents.VIEW_STACK_PUSH.invoker().onPush(camera);
 
+            if (camera instanceof Locked) {
+                this.lock();
+            }
+
             if (MinecraftClient.getInstance().gameRenderer != null) {
                 ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
             }
@@ -57,7 +62,7 @@ public final class ViewStack extends Stack<Camera> {
             camera = super.pop();
             CameraEvents.VIEW_STACK_POP.invoker().onPop(camera);
 
-            ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(camera);
+            ((GameRendererAccess) MinecraftClient.getInstance().gameRenderer).setCamera(peek());
         } else {
             camera = peek();
         }
