@@ -1,7 +1,8 @@
-package dev.lazurite.rayon.examplemod;
+package dev.lazurite.corduroy.examplemod;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.impl.views.free.LineView;
+import dev.lazurite.corduroy.impl.views.subject.OrbitView;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -22,12 +23,14 @@ public class ChangeViewKeybinding {
             if (ViewStack.getInstance().peek() instanceof LineView) {
                 ViewStack.getInstance().pop();
             } else {
-                ViewStack.getInstance().push(new LineView(
-                        new Vec3d(0, 5, 0),
-                        new Vec3d(0, 5, 20),
-                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(0),
-                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(90),
-                        400));
+//                ViewStack.getInstance().push(new LineView(
+//                        new Vec3d(0, 5, 0),
+//                        new Vec3d(0, 5, 20),
+//                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(0),
+//                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(90),
+//                        400));
+
+                ViewStack.getInstance().push(new OrbitView(client.player));
             }
         }
     }

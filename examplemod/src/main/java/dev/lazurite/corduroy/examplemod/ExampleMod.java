@@ -1,4 +1,4 @@
-package dev.lazurite.rayon.examplemod;
+package dev.lazurite.corduroy.examplemod;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;

@@ -22,6 +22,6 @@ public class GameRendererMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void init(MinecraftClient client, ResourceManager resourceManager, BufferBuilderStorage bufferBuilderStorage, CallbackInfo info) {
-        ViewStack.create(camera);
+        ViewStack.create(client, camera);
     }
 }

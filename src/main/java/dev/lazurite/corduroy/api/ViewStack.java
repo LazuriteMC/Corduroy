@@ -9,28 +9,27 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
 
-import java.util.EmptyStackException;
 import java.util.Stack;
 
 @Environment(EnvType.CLIENT)
-public final class ViewStack extends Stack<View> {
+public final class ViewStack {
     private static ViewStack instance;
-    private ViewContainer container;
-    private Camera camera;
+    private final Stack<Camera> stack = new Stack<>();
+    private MinecraftClient client;
     private boolean lock;
 
-    private ViewStack() {
+    private ViewStack(MinecraftClient client, Camera camera) {
+        this.client = client;
+        this.stack.push(camera);
     }
 
     public static ViewStack getInstance() {
         return instance;
     }
 
-    public static void create(Camera camera) {
-        instance = new ViewStack();
-        instance.camera = camera;
+    public static void create(MinecraftClient client, Camera camera) {
+        instance = new ViewStack(client, camera);
     }
 
     public void lock() {
@@ -45,12 +44,12 @@ public final class ViewStack extends Stack<View> {
         return this.lock;
     }
 
-    @Override
     public View push(View view) {
         if (!isLocked()) {
-            super.push(view);
+            ViewContainer container = new ViewContainer(view);
+            stack.push(container);
             ViewEvents.VIEW_STACK_PUSH.invoker().onPush(view);
-            setCamera(view);
+            ((GameRendererAccess) client.gameRenderer).setCamera(container);
 
             if (view instanceof LockedView) {
                 this.lock();
@@ -60,44 +59,22 @@ public final class ViewStack extends Stack<View> {
         return view;
     }
 
-    @Override
     public View pop() {
-        View view;
-
-        if (!isLocked()) {
-            view = super.pop();
-            ViewEvents.VIEW_STACK_POP.invoker().onPop(view);
-            setCamera(peek());
-        } else {
-            view = peek();
+        if (stack.size() > 1 && !isLocked()) { // there's at least one view container present
+            ViewContainer container = (ViewContainer) stack.pop();
+            ViewEvents.VIEW_STACK_POP.invoker().onPop(container.getView());
+            ((GameRendererAccess) client.gameRenderer).setCamera(stack.peek());
+            return container.getView();
         }
 
-        return view;
+        return null;
     }
 
-    @Override
     public View peek() {
-        try {
-            return super.peek();
-        } catch (EmptyStackException e) {
-            return null;
+        if (stack.size() > 1) {
+            return ((ViewContainer) stack.peek()).getView();
         }
-    }
 
-    public ViewContainer getContainer() {
-        return this.container;
-    }
-
-    private void setCamera(View view) {
-        GameRenderer gameRenderer = MinecraftClient.getInstance().gameRenderer;
-
-        if (gameRenderer != null) {
-            if (view == null) {
-                ((GameRendererAccess) gameRenderer).setCamera(camera);
-            } else {
-                this.container = new ViewContainer(view);
-                ((GameRendererAccess) gameRenderer).setCamera(container);
-            }
-        }
+        return null;
     }
 }
