@@ -6,6 +6,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 
+/**
+ * A simple view which positions itself at a given
+ * location and rotation.
+ * @see FreeView
+ */
 @Environment(EnvType.CLIENT)
 public class PointView implements FreeView {
     private final Quaternion orientation;

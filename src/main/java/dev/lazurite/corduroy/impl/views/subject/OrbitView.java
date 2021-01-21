@@ -7,6 +7,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 
+/**
+ * This {@link SubjectView} rotates around a given {@link Entity}.
+ * @see SubjectView
+ */
 public class OrbitView implements SubjectView, TickingView {
     private final Entity subject;
     private Quaternion orientation;

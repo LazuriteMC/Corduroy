@@ -1,5 +1,6 @@
 package dev.lazurite.corduroy.impl.views.free;
 
+import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.type.FreeView;
 import dev.lazurite.corduroy.api.view.special.TemporaryView;
 import dev.lazurite.corduroy.api.view.special.TickingView;
@@ -10,6 +11,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 
+/**
+ * A view that travels in a straight line for a given amount of ticks.
+ * Position and orientation are both interpolated throughout it's
+ * lifespan. When the view has finished, it automatically pops itself
+ * from the {@link ViewStack}.
+ * @see ViewStack
+ * @see FreeView
+ */
 @Environment(EnvType.CLIENT)
 public class LineView implements FreeView, TickingView, TemporaryView {
     private final Vec3d startPosition;

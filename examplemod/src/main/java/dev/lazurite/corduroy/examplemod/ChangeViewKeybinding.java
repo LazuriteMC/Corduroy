@@ -20,7 +20,7 @@ public class ChangeViewKeybinding {
 
     public static void callback(MinecraftClient client) {
         if (key.wasPressed()) {
-            if (ViewStack.getInstance().peek() instanceof LineView) {
+            if (ViewStack.getInstance().peek() instanceof OrbitView) {
                 ViewStack.getInstance().pop();
             } else {
 //                ViewStack.getInstance().push(new LineView(
