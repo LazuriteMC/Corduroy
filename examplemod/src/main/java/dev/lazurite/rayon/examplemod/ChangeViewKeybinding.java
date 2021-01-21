@@ -1,7 +1,7 @@
 package dev.lazurite.rayon.examplemod;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.impl.views.LineView;
+import dev.lazurite.corduroy.impl.views.free.LineView;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

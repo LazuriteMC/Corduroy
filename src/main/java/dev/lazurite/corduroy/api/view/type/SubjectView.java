@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.api.view;
+package dev.lazurite.corduroy.api.view.type;
 
 import net.minecraft.entity.Entity;
 

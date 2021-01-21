@@ -2,7 +2,7 @@ package dev.lazurite.corduroy.mixin;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.impl.ViewCamera;
+import dev.lazurite.corduroy.impl.ViewContainer;
 import dev.lazurite.corduroy.impl.math.QuaternionHelper;
 import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
@@ -13,14 +13,12 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
@@ -30,16 +28,15 @@ public class WorldRendererMixin {
 
     /**
      * Rotates the screen according to the orientation of the camera.
-     * @see ViewCamera
+     * @see ViewContainer
      * @see View
      */
     @Inject(method = "render", at = @At("HEAD"))
     public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
-        View view = ViewStack.getInstance().peek();
-
-        if (view != null) {
-            matrices.multiply(QuaternionHelper.slerp(view.getPreviousOrientation(), view.getOrientation(), tickDelta));
-            ((GameRendererAccess) client.gameRenderer).setRenderHand(view.shouldRenderHand());
+        if (camera instanceof ViewContainer) {
+            ViewContainer container = (ViewContainer) camera;
+            matrices.multiply(QuaternionHelper.slerp(container.getPrevOrientation(), container.getView().getOrientation(), tickDelta));
+            ((GameRendererAccess) client.gameRenderer).setRenderHand(container.getView().shouldRenderHand());
         } else {
             ((GameRendererAccess) client.gameRenderer).setRenderHand(true);
         }

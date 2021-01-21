@@ -1,5 +1,5 @@
 package dev.lazurite.corduroy.api.view.special;
 
-public interface TickableView {
+public interface TickingView {
     void tick();
 }

@@ -3,7 +3,7 @@ package dev.lazurite.corduroy.api;
 import dev.lazurite.corduroy.api.event.ViewEvents;
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.api.view.special.LockedView;
-import dev.lazurite.corduroy.impl.ViewCamera;
+import dev.lazurite.corduroy.impl.ViewContainer;
 import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,6 +17,7 @@ import java.util.Stack;
 @Environment(EnvType.CLIENT)
 public final class ViewStack extends Stack<View> {
     private static ViewStack instance;
+    private ViewContainer container;
     private Camera camera;
     private boolean lock;
 
@@ -83,6 +84,10 @@ public final class ViewStack extends Stack<View> {
         }
     }
 
+    public ViewContainer getContainer() {
+        return this.container;
+    }
+
     private void setCamera(View view) {
         GameRenderer gameRenderer = MinecraftClient.getInstance().gameRenderer;
 
@@ -90,7 +95,8 @@ public final class ViewStack extends Stack<View> {
             if (view == null) {
                 ((GameRendererAccess) gameRenderer).setCamera(camera);
             } else {
-                ((GameRendererAccess) gameRenderer).setCamera(new ViewCamera(view));
+                this.container = new ViewContainer(view);
+                ((GameRendererAccess) gameRenderer).setCamera(container);
             }
         }
     }

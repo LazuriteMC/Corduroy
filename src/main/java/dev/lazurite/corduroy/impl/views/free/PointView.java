@@ -1,6 +1,6 @@
-package dev.lazurite.corduroy.impl.views;
+package dev.lazurite.corduroy.impl.views.free;
 
-import dev.lazurite.corduroy.api.view.FreeView;
+import dev.lazurite.corduroy.api.view.type.FreeView;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.math.Quaternion;
@@ -30,17 +30,7 @@ public class PointView implements FreeView {
     }
 
     @Override
-    public Vec3d getPreviousPosition() {
-        return this.position;
-    }
-
-    @Override
     public Quaternion getOrientation() {
-        return this.orientation;
-    }
-
-    @Override
-    public Quaternion getPreviousOrientation() {
         return this.orientation;
     }
 
