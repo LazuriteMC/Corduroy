@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.api.view.special;
+package dev.lazurite.corduroy.api.view.type.special;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
@@ -9,6 +9,8 @@ import dev.lazurite.corduroy.mixin.ClientWorldMixin;
  * exist on the {@link ViewStack}. When its age has
  * exceeded its lifespan, it is automatically popped
  * from the {@link ViewStack}.
+ *
+ * @since 1.0.0
  * @see ClientWorldMixin
  * @see ViewStack
  */

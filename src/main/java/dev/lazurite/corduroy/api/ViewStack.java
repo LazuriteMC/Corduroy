@@ -2,21 +2,38 @@ package dev.lazurite.corduroy.api;
 
 import dev.lazurite.corduroy.api.event.ViewEvents;
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.api.view.special.LockedView;
+import dev.lazurite.corduroy.api.view.type.special.LockedView;
 import dev.lazurite.corduroy.impl.ViewContainer;
 import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
 
 import java.util.Stack;
 
+/**
+ * This is the main stack on which {@link View} objects can be pushed.
+ * When a {@link View} object is pushed, a {@link ViewContainer} is created
+ * to house the {@link View}. Since the {@link ViewContainer} extends from
+ * Minecraft's {@link Camera}, it can be rendered the screen simply by
+ * replacing the {@link Camera} object stored in {@link GameRenderer}.<br><br>
+ *
+ * When a {@link ViewContainer} is popped from the stack, the {@link View} that
+ * it contains is returned. If all {@link ViewContainer}s are popped from the stack,
+ * null will be returned and the original {@link Camera} will be used. The {@link Camera}
+ * object will always reside at the bottom of the stack, in order to preserve it.
+ *
+ * @since 1.0.0
+ * @see ViewContainer
+ * @see View
+ */
 @Environment(EnvType.CLIENT)
 public final class ViewStack {
     private static ViewStack instance;
     private final Stack<Camera> stack = new Stack<>();
-    private MinecraftClient client;
+    private final MinecraftClient client;
     private boolean lock;
 
     private ViewStack(MinecraftClient client, Camera camera) {

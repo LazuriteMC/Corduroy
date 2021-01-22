@@ -1,8 +1,8 @@
 package dev.lazurite.corduroy.mixin;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.view.special.TemporaryView;
-import dev.lazurite.corduroy.api.view.special.TickingView;
+import dev.lazurite.corduroy.api.view.type.special.TemporaryView;
+import dev.lazurite.corduroy.api.view.type.special.TickingView;
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.impl.ViewContainer;
 import net.fabricmc.api.EnvType;

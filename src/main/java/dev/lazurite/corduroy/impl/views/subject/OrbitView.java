@@ -1,6 +1,6 @@
 package dev.lazurite.corduroy.impl.views.subject;
 
-import dev.lazurite.corduroy.api.view.special.TickingView;
+import dev.lazurite.corduroy.api.view.type.special.TickingView;
 import dev.lazurite.corduroy.api.view.type.SubjectView;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.Entity;
