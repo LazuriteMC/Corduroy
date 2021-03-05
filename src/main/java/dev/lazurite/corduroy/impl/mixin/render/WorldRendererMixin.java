@@ -1,7 +1,6 @@
 package dev.lazurite.corduroy.impl.mixin.render;
 
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.api.view.type.SubjectView;
 import dev.lazurite.corduroy.impl.ViewContainer;
 import dev.lazurite.corduroy.impl.util.QuaternionHelper;
 import dev.lazurite.corduroy.impl.mixin.access.GameRendererAccess;
@@ -16,7 +15,6 @@ import net.minecraft.util.math.Quaternion;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -67,13 +65,6 @@ public class WorldRendererMixin {
             Matrix4f newMat = new Matrix4f(q);
             newMat.transpose();
             matrices.peek().getModel().multiply(newMat);
-
-            /* Apply boolean flags */
-            ((GameRendererAccess) client.gameRenderer).setRenderHand(container.getView().shouldRenderHand());
-            client.options.bobView = container.getView() instanceof SubjectView && ((SubjectView) container.getView()).shouldBobView();
-//            client.options.setPerspective(Perspective.FIRST_PERSON);
-        } else {
-            ((GameRendererAccess) client.gameRenderer).setRenderHand(true);
         }
     }
 }

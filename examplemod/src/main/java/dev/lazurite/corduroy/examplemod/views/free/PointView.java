@@ -38,19 +38,4 @@ public class PointView implements FreeView {
     public Quaternion getOrientation() {
         return this.orientation;
     }
-
-    @Override
-    public boolean shouldRenderHand() {
-        return false;
-    }
-
-    @Override
-    public boolean shouldRenderPlayer() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldRenderHud() {
-        return false;
-    }
 }

@@ -23,12 +23,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 @Environment(EnvType.CLIENT)
 public class GameRendererMixin {
-    @Shadow @Final private Camera camera;
     @Shadow @Final private MinecraftClient client;
+    @Shadow @Final private Camera camera;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void init(MinecraftClient client, ResourceManager resourceManager, BufferBuilderStorage bufferBuilderStorage, CallbackInfo info) {
         ViewStack.create(client, camera);
+    }
+
+    @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
+    public void renderHand(MatrixStack matrices, Camera camera, float tickDelta, CallbackInfo info) {
+        if (camera instanceof ViewContainer) {
+            if (!((ViewContainer) camera).getView().shouldRenderHand()) {
+                info.cancel();
+            }
+        }
     }
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)

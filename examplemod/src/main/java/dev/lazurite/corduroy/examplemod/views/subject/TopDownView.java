@@ -44,11 +44,6 @@ public class TopDownView implements SubjectView, TickingView {
     }
 
     @Override
-    public boolean shouldBobView() {
-        return true;
-    }
-
-    @Override
     public Vec3d getPosition() {
         return this.position;
     }
@@ -56,20 +51,5 @@ public class TopDownView implements SubjectView, TickingView {
     @Override
     public Quaternion getOrientation() {
         return this.orientation;
-    }
-
-    @Override
-    public boolean shouldRenderHand() {
-        return false;
-    }
-
-    @Override
-    public boolean shouldRenderPlayer() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldRenderHud() {
-        return false;
     }
 }
