@@ -1,11 +1,14 @@
 package dev.lazurite.corduroy.impl;
 
 import dev.lazurite.corduroy.api.view.View;
+import dev.lazurite.corduroy.impl.util.math.QuaternionHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -14,8 +17,8 @@ import net.minecraft.world.BlockView;
 @Environment(EnvType.CLIENT)
 public class ViewContainer extends Camera {
     private final View view;
-    private Vec3d prevPosition;
-    private Quaternion prevOrientation;
+    public Vec3d prevPosition;
+    public Quaternion prevOrientation;
 
     public ViewContainer(View view) {
         this.view = view;
@@ -40,12 +43,23 @@ public class ViewContainer extends Camera {
         return this.view;
     }
 
-    public Quaternion getPrevOrientation() {
-        return prevOrientation;
+    @Override
+    public Entity getFocusedEntity() {
+        return new CowEntity(EntityType.COW, MinecraftClient.getInstance().world);
     }
 
     @Override
-    public Entity getFocusedEntity() {
-        return MinecraftClient.getInstance().player;
+    public Quaternion getRotation() {
+        return getView().getOrientation();
+    }
+
+    @Override
+    public float getYaw() {
+        return QuaternionHelper.getYaw(getView().getOrientation());
+    }
+
+    @Override
+    public float getPitch() {
+        return QuaternionHelper.getPitch(getView().getOrientation());
     }
 }

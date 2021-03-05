@@ -61,7 +61,7 @@ public final class ViewStack {
         return this.lock;
     }
 
-    public View push(View view) {
+    public void push(View view) {
         if (!isLocked()) {
             ViewContainer container = new ViewContainer(view);
             stack.push(container);
@@ -72,8 +72,6 @@ public final class ViewStack {
                 this.lock();
             }
         }
-
-        return view;
     }
 
     public View pop() {

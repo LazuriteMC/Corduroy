@@ -4,7 +4,7 @@ import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.type.FreeView;
 import dev.lazurite.corduroy.api.view.type.special.TemporaryView;
 import dev.lazurite.corduroy.api.view.type.special.TickingView;
-import dev.lazurite.corduroy.impl.math.QuaternionHelper;
+import dev.lazurite.corduroy.impl.util.math.QuaternionHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.math.MathHelper;

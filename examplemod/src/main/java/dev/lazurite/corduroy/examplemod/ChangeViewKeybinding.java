@@ -1,8 +1,10 @@
 package dev.lazurite.corduroy.examplemod;
 
 import dev.lazurite.corduroy.api.ViewStack;
+import dev.lazurite.corduroy.api.view.View;
+import dev.lazurite.corduroy.impl.util.math.QuaternionHelper;
 import dev.lazurite.corduroy.impl.views.free.LineView;
-import dev.lazurite.corduroy.impl.views.subject.OrbitView;
+import dev.lazurite.corduroy.impl.views.subject.TopDownView;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -11,6 +13,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.Vector3f;
+import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
@@ -20,17 +23,20 @@ public class ChangeViewKeybinding {
 
     public static void callback(MinecraftClient client) {
         if (key.wasPressed()) {
-            if (ViewStack.getInstance().peek() instanceof OrbitView) {
+            if (ViewStack.getInstance().peek() instanceof LineView) {
                 ViewStack.getInstance().pop();
             } else {
-//                ViewStack.getInstance().push(new LineView(
-//                        new Vec3d(0, 5, 0),
-//                        new Vec3d(0, 5, 20),
-//                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(0),
-//                        Vector3f.NEGATIVE_Z.getDegreesQuaternion(90),
-//                        400));
 
-                ViewStack.getInstance().push(new OrbitView(client.player));
+                for (int i = 0; i < 3; ++i) {
+                    ViewStack.getInstance().push(new LineView(
+                            new Vec3d(0, 5, 0),
+                            new Vec3d(0, 5, 20),
+                            new Quaternion(Quaternion.IDENTITY),
+                            QuaternionHelper.rotateY(QuaternionHelper.rotateX(new Quaternion(Quaternion.IDENTITY), -20), 180),
+                            100));
+                }
+
+//                ViewStack.getInstance().push(new TopDownView(client.player));
             }
         }
     }
