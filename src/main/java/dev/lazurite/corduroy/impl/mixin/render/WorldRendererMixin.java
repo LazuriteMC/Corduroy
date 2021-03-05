@@ -26,12 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 public class WorldRendererMixin {
     @Shadow @Final private MinecraftClient client;
-    @Unique private boolean bobView;
-
-    @Inject(method = "<init>", at = @At("RETURN"))
-    public void init(MinecraftClient client, BufferBuilderStorage bufferBuilders, CallbackInfo info) {
-        this.bobView = client.options.bobView;
-    }
 
     /**
      * Allows the player to be rendered outside of third-person mode.
@@ -80,7 +74,6 @@ public class WorldRendererMixin {
 //            client.options.setPerspective(Perspective.FIRST_PERSON);
         } else {
             ((GameRendererAccess) client.gameRenderer).setRenderHand(true);
-            client.options.bobView = bobView;
         }
     }
 }

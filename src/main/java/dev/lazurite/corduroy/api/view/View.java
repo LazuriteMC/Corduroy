@@ -36,4 +36,8 @@ public interface View {
     default boolean shouldBobView() {
         return false;
     }
+
+    default boolean shouldMovementChangeFOV() {
+        return false;
+    }
 }

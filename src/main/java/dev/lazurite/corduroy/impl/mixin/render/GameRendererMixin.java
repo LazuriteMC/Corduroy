@@ -49,6 +49,15 @@ public class GameRendererMixin {
         }
     }
 
+    @Inject(method = "updateMovementFovMultiplier", at = @At("HEAD"), cancellable = true)
+    private void updateMovementFovMultiplier(CallbackInfo info) {
+        if (camera instanceof ViewContainer) {
+            if (!((ViewContainer) camera).getView().shouldMovementChangeFOV()) {
+                info.cancel();
+            }
+        }
+    }
+
     @Redirect(
         method = "renderWorld",
         at = @At(
