@@ -1,10 +1,10 @@
-package dev.lazurite.corduroy.mixin;
+package dev.lazurite.corduroy.impl.mixin;
 
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.api.view.type.SubjectView;
 import dev.lazurite.corduroy.impl.ViewContainer;
-import dev.lazurite.corduroy.impl.util.math.QuaternionHelper;
-import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
+import dev.lazurite.corduroy.impl.util.QuaternionHelper;
+import dev.lazurite.corduroy.impl.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

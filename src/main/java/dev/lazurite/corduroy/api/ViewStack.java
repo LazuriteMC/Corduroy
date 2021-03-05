@@ -4,7 +4,7 @@ import dev.lazurite.corduroy.api.event.ViewEvents;
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.api.view.type.special.LockedView;
 import dev.lazurite.corduroy.impl.ViewContainer;
-import dev.lazurite.corduroy.mixin.access.GameRendererAccess;
+import dev.lazurite.corduroy.impl.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

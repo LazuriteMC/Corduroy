@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.mixin.access;
+package dev.lazurite.corduroy.impl.mixin.access;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

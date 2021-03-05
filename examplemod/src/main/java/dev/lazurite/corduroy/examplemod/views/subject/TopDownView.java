@@ -1,8 +1,8 @@
-package dev.lazurite.corduroy.impl.views.subject;
+package dev.lazurite.corduroy.examplemod.views.subject;
 
 import dev.lazurite.corduroy.api.view.type.special.TickingView;
 import dev.lazurite.corduroy.api.view.type.SubjectView;
-import dev.lazurite.corduroy.impl.util.math.QuaternionHelper;
+import dev.lazurite.corduroy.impl.util.QuaternionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -15,17 +15,27 @@ public class TopDownView implements SubjectView, TickingView {
     private final Entity subject;
     private Quaternion orientation;
     private Vec3d position;
+    private float height;
 
-    public TopDownView(Entity subject) { // TODO configurable height
+    public TopDownView(Entity subject, float height) {
         this.subject = subject;
-        this.position = subject.getPos().add(new Vec3d(0, 5, 0));
-        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.yaw), -90);
+        this.height = height;
+        this.position = subject.getPos().add(new Vec3d(0, height, 0));
+        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.yaw + 180), 90);
     }
 
     @Override
     public void tick() {
-        this.position = subject.getPos().add(new Vec3d(0, 5, 0));
-        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.yaw), -90);
+        this.position = subject.getPos().add(new Vec3d(0, height, 0));
+        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.yaw + 180), 90);
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getHeight() {
+        return this.height;
     }
 
     @Override

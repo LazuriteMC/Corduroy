@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.impl.views.free;
+package dev.lazurite.corduroy.examplemod.views.free;
 
 import dev.lazurite.corduroy.api.view.type.FreeView;
 import net.fabricmc.api.EnvType;

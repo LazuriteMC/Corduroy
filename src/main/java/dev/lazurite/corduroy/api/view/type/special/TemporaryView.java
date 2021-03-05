@@ -2,7 +2,7 @@ package dev.lazurite.corduroy.api.view.type.special;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.mixin.ClientWorldMixin;
+import dev.lazurite.corduroy.impl.mixin.ClientWorldMixin;
 
 /**
  * This allows a {@link View} to only temporarily

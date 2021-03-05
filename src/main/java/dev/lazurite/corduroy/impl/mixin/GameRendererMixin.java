@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.mixin;
+package dev.lazurite.corduroy.impl.mixin;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.impl.ViewContainer;
@@ -9,6 +9,7 @@ import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.math.Quaternion;
 import org.spongepowered.asm.mixin.Final;
@@ -18,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(GameRenderer.class)
 @Environment(EnvType.CLIENT)
@@ -40,7 +40,7 @@ public class GameRendererMixin {
         )
     )
     public void pitch(MatrixStack stack, Quaternion quaternion) {
-        if (!(MinecraftClient.getInstance().gameRenderer.getCamera() instanceof ViewContainer)) {
+        if (!(client.gameRenderer.getCamera() instanceof ViewContainer)) {
             stack.multiply(quaternion);
         }
     }
@@ -54,8 +54,10 @@ public class GameRendererMixin {
             )
     )
     public void yaw(MatrixStack stack, Quaternion quaternion) {
-        if (!(MinecraftClient.getInstance().gameRenderer.getCamera() instanceof ViewContainer)) {
+        if (!(client.gameRenderer.getCamera() instanceof ViewContainer)) {
             stack.multiply(quaternion);
+        } else {
+            stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
         }
     }
 }

@@ -1,7 +1,7 @@
 package dev.lazurite.corduroy.impl;
 
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.impl.util.math.QuaternionHelper;
+import dev.lazurite.corduroy.impl.util.QuaternionHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

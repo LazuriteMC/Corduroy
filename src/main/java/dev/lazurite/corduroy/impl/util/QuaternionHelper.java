@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.impl.util.math;
+package dev.lazurite.corduroy.impl.util;
 
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.Quaternion;

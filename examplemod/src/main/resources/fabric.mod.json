@@ -4,15 +4,13 @@
   "version": "${version}",
 
   "name": "Corduroy Example Mod",
-  "description": "An example mod for Corduroy",
+  "description": "An example mod for Corduroy.",
   "authors": [ "The Lazurite Team" ],
 
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "dev.lazurite.corduroy.examplemod.ExampleMod"
-    ]
+    "client": [ "dev.lazurite.corduroy.examplemod.ExampleMod" ]
   },
 
   "depends": {
