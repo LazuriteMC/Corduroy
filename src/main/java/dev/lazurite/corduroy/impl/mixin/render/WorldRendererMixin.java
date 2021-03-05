@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.impl.mixin;
+package dev.lazurite.corduroy.impl.mixin.render;
 
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.api.view.type.SubjectView;

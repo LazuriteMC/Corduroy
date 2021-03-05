@@ -92,4 +92,8 @@ public final class ViewStack {
 
         return null;
     }
+
+    public void clear() {
+        stack.clear();
+    }
 }

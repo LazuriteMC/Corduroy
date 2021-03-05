@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.impl.mixin;
+package dev.lazurite.corduroy.impl.mixin.render;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.impl.ViewContainer;
@@ -29,6 +29,24 @@ public class GameRendererMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
     public void init(MinecraftClient client, ResourceManager resourceManager, BufferBuilderStorage bufferBuilderStorage, CallbackInfo info) {
         ViewStack.create(client, camera);
+    }
+
+    @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
+    public void bobView(MatrixStack stack, float f, CallbackInfo info) {
+        if (camera instanceof ViewContainer) {
+            if (!((ViewContainer) camera).getView().shouldBobView()) {
+                info.cancel();
+            }
+        }
+    }
+
+    @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
+    private void bobViewWhenHurt(MatrixStack stack, float f, CallbackInfo info) {
+        if (camera instanceof ViewContainer) {
+            if (!((ViewContainer) camera).getView().shouldBobView()) {
+                info.cancel();
+            }
+        }
     }
 
     @Redirect(

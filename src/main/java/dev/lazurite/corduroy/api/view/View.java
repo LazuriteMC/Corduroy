@@ -21,7 +21,19 @@ public interface View {
     Vec3d getPosition();
     Quaternion getOrientation();
 
-    boolean shouldRenderHand();
-    boolean shouldRenderPlayer();
-    boolean shouldRenderHud();
+    default boolean shouldRenderHand() {
+        return false;
+    }
+
+    default boolean shouldRenderPlayer() {
+        return true;
+    }
+
+    default boolean shouldRenderHud() {
+        return false;
+    }
+
+    default boolean shouldBobView() {
+        return false;
+    }
 }

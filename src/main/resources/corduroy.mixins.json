@@ -6,9 +6,10 @@
   "client": [
     "access.GameRendererAccess",
     "ClientWorldMixin",
-    "GameRendererMixin",
-    "InGameHudMixin",
-    "WorldRendererMixin"
+    "LivingEntityMixin",
+    "render.GameRendererMixin",
+    "render.InGameHudMixin",
+    "render.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

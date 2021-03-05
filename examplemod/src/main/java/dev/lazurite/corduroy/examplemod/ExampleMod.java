@@ -41,7 +41,7 @@ public class ExampleMod implements ClientModInitializer {
 //                                100));
 //                    }
 
-                    ViewStack.getInstance().push(new TopDownView(client.player, 10));
+                    ViewStack.getInstance().push(new TopDownView(client.player, 4));
                 }
             }
         });
