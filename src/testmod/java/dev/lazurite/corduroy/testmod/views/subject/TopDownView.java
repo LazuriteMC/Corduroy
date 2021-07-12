@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.examplemod.views.subject;
+package dev.lazurite.corduroy.testmod.views.subject;
 
 import dev.lazurite.corduroy.api.view.type.special.TickingView;
 import dev.lazurite.corduroy.api.view.type.SubjectView;
@@ -21,13 +21,13 @@ public class TopDownView implements SubjectView, TickingView {
         this.subject = subject;
         this.height = height;
         this.position = subject.getPos().add(new Vec3d(0, height, 0));
-        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.yaw + 180), 90);
+        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.getYaw()+ 180), 90);
     }
 
     @Override
     public void tick() {
         this.position = subject.getPos().add(new Vec3d(0, height, 0));
-        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.yaw + 180), 90);
+        this.orientation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -subject.getYaw() + 180), 90);
     }
 
     public void setHeight(float height) {
@@ -49,7 +49,7 @@ public class TopDownView implements SubjectView, TickingView {
     }
 
     @Override
-    public Quaternion getOrientation() {
+    public Quaternion getRotation() {
         return this.orientation;
     }
 }

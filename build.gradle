@@ -1,79 +1,118 @@
 plugins {
-	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
 }
 
-subprojects {
-	apply plugin: 'fabric-loom'
-	archivesBaseName = rootProject.archives_base_name + "-" + project.name
-	group = rootProject.maven_group + "." + rootProject.archives_base_name
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
-	dependencies {
-		compile rootProject.sourceSets.main.output
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	}
+minecraft {
+	accessWidener = file("src/main/resources/corduroy.accesswidener")
 }
 
-allprojects {
+allprojects { project ->
 	apply plugin: 'fabric-loom'
+	apply plugin: 'maven-publish'
+	apply plugin: 'java-library'
 
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	dependencies {
+		minecraft "com.mojang:minecraft:${project.minecraft_version}"
+		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	}
 
 	archivesBaseName = project.archives_base_name
 	version = project.mod_version
 	group = project.maven_group
 
-	dependencies {
-		minecraft "com.mojang:minecraft:${project.minecraft_version}"
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	sourceSets {
+		testmod {
+			compileClasspath += main.compileClasspath
+			runtimeClasspath += main.runtimeClasspath
+		}
 	}
 
 	processResources {
 		inputs.property "version", project.version
 
-		from(sourceSets.main.resources.srcDirs) {
-			include "fabric.mod.json"
+		filesMatching("fabric.mod.json") {
 			expand "version": project.version
-		}
-
-		from(sourceSets.main.resources.srcDirs) {
-			exclude "fabric.mod.json"
 		}
 	}
 
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"
+		it.options.release = 16
 	}
-}
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
-}
+	task sourcesJar(type: Jar, dependsOn: classes) {
+		classifier = "sources"
+		from sourceSets.main.allSource
+	}
 
-jar {
-	from "LICENSE"
-}
+	dependencies {
+		testmodImplementation project.sourceSets.main.output
+	}
 
-remapJar {
-}
+	java {
+		withSourcesJar()
+	}
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			artifact(remapJar) {
-				builtBy remapJar
-			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${project.archivesBaseName}"}
 		}
 	}
 
-	repositories {
-		mavenLocal()
+	remapJar {
+	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				artifactId = 'corduroy'
+
+				pom {
+					name = 'Corduroy'
+					description = 'A camera API for Minecraft.'
+					url = 'https://github.com/LazuriteMC/Corduroy'
+					developers {
+						developer {
+							id = 'bluevista'
+							name = 'BlueVista'
+							email = 'ethan@ejohnsons.com'
+						}
+					}
+				}
+
+				versionMapping {
+					usage('java-api') {
+						fromResolutionOf('runtimeClasspath')
+					}
+					usage('java-runtime') {
+						fromResolutionResult()
+					}
+				}
+
+				artifact(remapJar) {
+					builtBy remapJar
+				}
+
+				artifact(sourcesJar) {
+					builtBy remapSourcesJar
+				}
+			}
+		}
+
+		repositories {
+			maven {
+				url = 'https://lazurite.dev/maven/releases'
+				credentials {
+					username = project.property("publish.lazurite.alias")
+					password = project.property("publish.lazurite.secret")
+				}
+			}
+		}
 	}
 }

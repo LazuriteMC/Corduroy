@@ -1,14 +1,13 @@
-package dev.lazurite.corduroy.examplemod;
+package dev.lazurite.corduroy.testmod;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.examplemod.views.free.LineView;
-import dev.lazurite.corduroy.examplemod.views.subject.TopDownView;
+import dev.lazurite.corduroy.testmod.views.subject.GlideInView;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
@@ -28,21 +27,11 @@ public class ExampleMod implements ClientModInitializer {
         KeyBindingHelper.registerKeyBinding(key);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (key.wasPressed()) {
-                if (ViewStack.getInstance().peek() instanceof LineView) {
+                ViewStack.getInstance().peek().ifPresentOrElse(view -> {
                     ViewStack.getInstance().pop();
-                } else {
-
-//                    for (int i = 0; i < 3; ++i) {
-//                        ViewStack.getInstance().push(new LineView(
-//                                new Vec3d(0, 5, 0),
-//                                new Vec3d(0, 5, 20),
-//                                new Quaternion(Quaternion.IDENTITY),
-//                                QuaternionHelper.rotateY(QuaternionHelper.rotateX(new Quaternion(Quaternion.IDENTITY), -20), 180),
-//                                100));
-//                    }
-
-                    ViewStack.getInstance().push(new TopDownView(client.player, 4));
-                }
+                }, () -> {
+                    ViewStack.getInstance().push(new GlideInView(client.player, 10, 5, 60));
+                });
             }
         });
     }

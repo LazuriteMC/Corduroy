@@ -1,7 +1,6 @@
 package dev.lazurite.corduroy.api.view;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.view.type.FreeView;
 import dev.lazurite.corduroy.api.view.type.SubjectView;
 import dev.lazurite.corduroy.impl.ViewContainer;
 import net.minecraft.util.math.Quaternion;
@@ -15,11 +14,10 @@ import net.minecraft.util.math.Vec3d;
  *
  * @since 1.0.0
  * @see SubjectView
- * @see FreeView
  */
 public interface View {
     Vec3d getPosition();
-    Quaternion getOrientation();
+    Quaternion getRotation();
 
     default boolean shouldRenderHand() {
         return false;
@@ -37,7 +35,7 @@ public interface View {
         return false;
     }
 
-    default boolean shouldMovementChangeFOV() {
+    default boolean shouldPlayerControl() {
         return false;
     }
 }

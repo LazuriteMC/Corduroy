@@ -4,12 +4,12 @@
   "package": "dev.lazurite.corduroy.impl.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "access.GameRendererAccess",
     "ClientWorldMixin",
     "LivingEntityMixin",
-    "render.GameRendererMixin",
-    "render.InGameHudMixin",
-    "render.WorldRendererMixin"
+    "PreventativeMixin$GameRendererMixin",
+    "PreventativeMixin$InGameHudMixin",
+    "PreventativeMixin$MouseMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

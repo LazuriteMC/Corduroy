@@ -4,13 +4,13 @@ import dev.lazurite.corduroy.api.event.ViewEvents;
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.api.view.type.special.LockedView;
 import dev.lazurite.corduroy.impl.ViewContainer;
-import dev.lazurite.corduroy.impl.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 
+import java.util.Optional;
 import java.util.Stack;
 
 /**
@@ -63,10 +63,10 @@ public final class ViewStack {
 
     public void push(View view) {
         if (!isLocked()) {
-            ViewContainer container = new ViewContainer(view);
+            var container = new ViewContainer(view);
             stack.push(container);
             ViewEvents.VIEW_STACK_PUSH.invoker().onPush(view);
-            ((GameRendererAccess) client.gameRenderer).setCamera(container);
+            client.gameRenderer.camera = container;
 
             if (view instanceof LockedView) {
                 this.lock();
@@ -74,23 +74,23 @@ public final class ViewStack {
         }
     }
 
-    public View pop() {
-        if (stack.size() > 1 && !isLocked()) { // there's at least one view container present
-            ViewContainer container = (ViewContainer) stack.pop();
+    public Optional<View> pop() {
+        if (stack.size() > 1 && !isLocked()) { // there's at least one container present
+            var container = (ViewContainer) stack.pop();
             ViewEvents.VIEW_STACK_POP.invoker().onPop(container.getView());
-            ((GameRendererAccess) client.gameRenderer).setCamera(stack.peek());
-            return container.getView();
+            client.gameRenderer.camera = stack.peek();
+            return Optional.of(container.getView());
         }
 
-        return null;
+        return Optional.empty();
     }
 
-    public View peek() {
-        if (stack.size() > 1) {
-            return ((ViewContainer) stack.peek()).getView();
+    public Optional<View> peek() {
+        if (stack.peek() instanceof ViewContainer container) {
+            return Optional.of(container.getView());
         }
 
-        return null;
+        return Optional.empty();
     }
 
     public void clear() {

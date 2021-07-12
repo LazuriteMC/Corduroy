@@ -1,7 +1,7 @@
 package dev.lazurite.corduroy.impl.util;
 
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 public class QuaternionHelper {
     public static Quaternion rotateX(Quaternion quat, double deg) {
@@ -22,7 +22,7 @@ public class QuaternionHelper {
         return quat;
     }
 
-    public static Vector3f toEulerAngles(Quaternion quat) {
+    public static Vec3f toEulerAngles(Quaternion quat) {
         Quaternion q = new Quaternion(Quaternion.IDENTITY);
         q.set(quat.getZ(), quat.getX(), quat.getY(), quat.getW());
 
@@ -48,7 +48,7 @@ public class QuaternionHelper {
         double cosy_cosp = 1 - 2 * (q.getY() * q.getY() + q.getZ() * q.getZ());
         z = (float) Math.atan2(siny_cosp, cosy_cosp);
 
-        return new Vector3f(x, y, z);
+        return new Vec3f(x, y, z);
     }
 
     public static float getYaw(Quaternion quat) {

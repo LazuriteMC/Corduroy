@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "testmod",
   "version": "${version}",
 
   "name": "Corduroy Example Mod",
@@ -10,13 +10,13 @@
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
-    "client": [ "dev.lazurite.corduroy.examplemod.ExampleMod" ]
+    "client": [ "dev.lazurite.corduroy.testmod.ExampleMod" ]
   },
 
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.17.x"
   },
 
   "suggests": {

@@ -10,6 +10,3 @@ pluginManagement {
 }
 
 rootProject.name = 'Corduroy'
-
-include "examplemod"
-project(":examplemod").projectDir = file("examplemod")

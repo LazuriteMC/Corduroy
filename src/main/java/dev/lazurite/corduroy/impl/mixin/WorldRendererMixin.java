@@ -1,9 +1,8 @@
-package dev.lazurite.corduroy.impl.mixin.render;
+package dev.lazurite.corduroy.impl.mixin;
 
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.impl.ViewContainer;
 import dev.lazurite.corduroy.impl.util.QuaternionHelper;
-import dev.lazurite.corduroy.impl.mixin.access.GameRendererAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -35,12 +34,12 @@ public class WorldRendererMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/render/Camera;getFocusedEntity()Lnet/minecraft/entity/Entity;",
-                    ordinal = 3
+                    ordinal = 0
             )
     )
     public Entity getFocusedEntity(Camera camera) {
-        if (camera instanceof ViewContainer) {
-            if (((ViewContainer) camera).getView().shouldRenderPlayer()) {
+        if (camera instanceof ViewContainer container) {
+            if (container.getView().shouldRenderPlayer()) {
                 return client.player;
             }
         }
@@ -55,11 +54,9 @@ public class WorldRendererMixin {
      */
     @Inject(method = "render", at = @At("HEAD"))
     public void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo info) {
-        if (camera instanceof ViewContainer) {
-            ViewContainer container = (ViewContainer) camera;
-
+        if (camera instanceof ViewContainer container) {
             /* Matrices fix screen rotation */
-            Quaternion q = QuaternionHelper.slerp(container.prevOrientation, container.getView().getOrientation(), tickDelta);
+            Quaternion q = QuaternionHelper.slerp(container.prevOrientation, container.getView().getRotation(), tickDelta);
             QuaternionHelper.rotateY(q, 180);
             q.set(q.getX(), -q.getY(), q.getZ(), -q.getW());
             Matrix4f newMat = new Matrix4f(q);

@@ -4,11 +4,8 @@ import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.impl.util.QuaternionHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -23,16 +20,17 @@ public class ViewContainer extends Camera {
     public ViewContainer(View view) {
         this.view = view;
         this.prevPosition = view.getPosition();
-        this.prevOrientation = view.getOrientation();
+        this.prevOrientation = view.getRotation();
     }
 
     public void tick() {
-        this.prevOrientation = view.getOrientation();
+        this.prevOrientation = view.getRotation();
         this.prevPosition = view.getPosition();
     }
 
     @Override
     public void update(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta) {
+        this.focusedEntity = focusedEntity;
         double x = MathHelper.lerp(tickDelta, prevPosition.x, getView().getPosition().x);
         double y = MathHelper.lerp(tickDelta, prevPosition.y, getView().getPosition().y);
         double z = MathHelper.lerp(tickDelta, prevPosition.z, getView().getPosition().z);
@@ -43,23 +41,31 @@ public class ViewContainer extends Camera {
         return this.view;
     }
 
-    @Override
-    public Entity getFocusedEntity() {
-        return new CowEntity(EntityType.COW, MinecraftClient.getInstance().world);
-    }
+//    @Override
+//    public Entity getFocusedEntity() {
+//        if (view.shouldRenderPlayer()) {
+//            if (view instanceof SubjectView) {
+//                return ((SubjectView) view).getSubject();
+//            }
+//        } else {
+//            return MinecraftClient.getInstance().player;
+//        }
+//
+//        return super.getFocusedEntity();
+//    }
 
     @Override
     public Quaternion getRotation() {
-        return getView().getOrientation();
+        return getView().getRotation();
     }
 
     @Override
     public float getYaw() {
-        return QuaternionHelper.getYaw(getView().getOrientation());
+        return QuaternionHelper.getYaw(getView().getRotation());
     }
 
     @Override
     public float getPitch() {
-        return QuaternionHelper.getPitch(getView().getOrientation());
+        return QuaternionHelper.getPitch(getView().getRotation());
     }
 }

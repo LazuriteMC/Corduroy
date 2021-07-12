@@ -1,6 +1,6 @@
-package dev.lazurite.corduroy.examplemod.views.free;
+package dev.lazurite.corduroy.testmod.views.free;
 
-import dev.lazurite.corduroy.api.view.type.FreeView;
+import dev.lazurite.corduroy.api.view.View;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.math.Quaternion;
@@ -9,10 +9,10 @@ import net.minecraft.util.math.Vec3d;
 /**
  * A simple view which positions itself at a given
  * location and rotation.
- * @see FreeView
+ * @see View
  */
 @Environment(EnvType.CLIENT)
-public class PointView implements FreeView {
+public class PointView implements View {
     private final Quaternion orientation;
     private final Vec3d position;
 
@@ -22,20 +22,12 @@ public class PointView implements FreeView {
     }
 
     @Override
-    public void setPosition(Vec3d position) {
-    }
-
-    @Override
-    public void setOrientation(Quaternion orientation) {
-    }
-
-    @Override
     public Vec3d getPosition() {
         return this.position;
     }
 
     @Override
-    public Quaternion getOrientation() {
+    public Quaternion getRotation() {
         return this.orientation;
     }
 }

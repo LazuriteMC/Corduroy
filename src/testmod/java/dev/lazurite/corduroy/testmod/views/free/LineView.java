@@ -1,7 +1,7 @@
-package dev.lazurite.corduroy.examplemod.views.free;
+package dev.lazurite.corduroy.testmod.views.free;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.view.type.FreeView;
+import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.api.view.type.special.TemporaryView;
 import dev.lazurite.corduroy.api.view.type.special.TickingView;
 import dev.lazurite.corduroy.impl.util.QuaternionHelper;
@@ -17,10 +17,10 @@ import net.minecraft.util.math.Vec3d;
  * lifespan. When the view has finished, it automatically pops itself
  * from the {@link ViewStack}.
  * @see ViewStack
- * @see FreeView
+ * @see View
  */
 @Environment(EnvType.CLIENT)
-public class LineView implements FreeView, TickingView, TemporaryView {
+public class LineView implements View, TickingView, TemporaryView {
     private final Vec3d startPosition;
     private final Vec3d endPosition;
     private final Quaternion startOrientation;
@@ -28,7 +28,7 @@ public class LineView implements FreeView, TickingView, TemporaryView {
     private final int lifeSpan;
 
     private Vec3d position;
-    private Quaternion orientation;
+    private Quaternion rotation;
     private int age;
 
     public LineView(Vec3d startPosition, Vec3d endPosition, int lifeSpan) {
@@ -43,7 +43,7 @@ public class LineView implements FreeView, TickingView, TemporaryView {
         this.lifeSpan = lifeSpan;
 
         this.position = startPosition;
-        this.orientation = startOrientation;
+        this.rotation = startOrientation;
     }
 
     @Override
@@ -67,18 +67,8 @@ public class LineView implements FreeView, TickingView, TemporaryView {
         double x = MathHelper.lerp(delta, startPosition.x, endPosition.x);
         double y = MathHelper.lerp(delta, startPosition.y, endPosition.y);
         double z = MathHelper.lerp(delta, startPosition.z, endPosition.z);
-        setPosition(new Vec3d(x, y, z));
-        setOrientation(QuaternionHelper.slerp(startOrientation, endOrientation, delta));
-    }
-
-    @Override
-    public void setPosition(Vec3d position) {
-        this.position = position;
-    }
-
-    @Override
-    public void setOrientation(Quaternion orientation) {
-        this.orientation = orientation;
+        this.position = new Vec3d(x, y, z);
+        this.rotation = QuaternionHelper.slerp(startOrientation, endOrientation, delta);
     }
 
     @Override
@@ -87,7 +77,7 @@ public class LineView implements FreeView, TickingView, TemporaryView {
     }
 
     @Override
-    public Quaternion getOrientation() {
-        return this.orientation;
+    public Quaternion getRotation() {
+        return this.rotation;
     }
 }

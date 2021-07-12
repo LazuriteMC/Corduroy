@@ -3,7 +3,6 @@ package dev.lazurite.corduroy.impl.mixin;
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.type.special.TemporaryView;
 import dev.lazurite.corduroy.api.view.type.special.TickingView;
-import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.impl.ViewContainer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -25,27 +24,26 @@ public abstract class ClientWorldMixin {
 
     @Inject(method = "tickEntities", at = @At("HEAD"))
     public void tickViews(CallbackInfo info) {
-        View view = ViewStack.getInstance().peek();
-
-        /* Tick the view container */
-        if (client.gameRenderer.getCamera() instanceof ViewContainer) {
-            ((ViewContainer) client.gameRenderer.getCamera()).tick();
-        }
-
-        /* TemporaryView Aging */
-        if (view instanceof TemporaryView) {
-            TemporaryView temp = (TemporaryView) view;
-            temp.setAge(temp.getAge() + 1);
-
-            if (temp.getAge() > temp.getLifeSpan()) {
-                temp.finish();
+        ViewStack.getInstance().peek().ifPresent(view -> {
+            /* Tick the view container */
+            if (client.gameRenderer.getCamera() instanceof ViewContainer container) {
+                container.tick();
             }
-        }
 
-        /* TickingView Ticking */
-        if (view instanceof TickingView) {
-            ((TickingView) view).tick();
-        }
+            /* TemporaryView Aging */
+            if (view instanceof TemporaryView temporaryView) {
+                temporaryView.setAge(temporaryView.getAge() + 1);
+
+                if (temporaryView.getAge() > temporaryView.getLifeSpan()) {
+                    temporaryView.finish();
+                }
+            }
+
+            /* TickingView Ticking */
+            if (view instanceof TickingView tickingView) {
+                tickingView.tick();
+            }
+        });
     }
 
 

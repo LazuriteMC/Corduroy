@@ -16,11 +16,12 @@
   "icon": "assets/corduroy/icon.png",
   "environment": "*",
   "mixins": [ "corduroy.mixins.json" ],
+  "accessWidener" : "corduroy.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
+    "minecraft": "1.17.x"
   },
 
   "suggests": {
