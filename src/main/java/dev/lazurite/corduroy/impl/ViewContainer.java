@@ -1,7 +1,7 @@
 package dev.lazurite.corduroy.impl;
 
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.impl.util.QuaternionHelper;
+import dev.lazurite.toolbox.math.QuaternionHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.Camera;
@@ -31,28 +31,15 @@ public class ViewContainer extends Camera {
     @Override
     public void update(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta) {
         this.focusedEntity = focusedEntity;
-        double x = MathHelper.lerp(tickDelta, prevPosition.x, getView().getPosition().x);
-        double y = MathHelper.lerp(tickDelta, prevPosition.y, getView().getPosition().y);
-        double z = MathHelper.lerp(tickDelta, prevPosition.z, getView().getPosition().z);
+        var x = MathHelper.lerp(tickDelta, prevPosition.x, getView().getPosition().x);
+        var y = MathHelper.lerp(tickDelta, prevPosition.y, getView().getPosition().y);
+        var z = MathHelper.lerp(tickDelta, prevPosition.z, getView().getPosition().z);
         setPos(x, y, z);
     }
 
     public View getView() {
         return this.view;
     }
-
-//    @Override
-//    public Entity getFocusedEntity() {
-//        if (view.shouldRenderPlayer()) {
-//            if (view instanceof SubjectView) {
-//                return ((SubjectView) view).getSubject();
-//            }
-//        } else {
-//            return MinecraftClient.getInstance().player;
-//        }
-//
-//        return super.getFocusedEntity();
-//    }
 
     @Override
     public Quaternion getRotation() {

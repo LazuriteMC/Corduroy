@@ -11,4 +11,5 @@ import net.minecraft.entity.Entity;
  */
 public interface SubjectView extends View {
     Entity getSubject();
+    boolean shouldRenderSubject();
 }

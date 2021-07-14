@@ -3,7 +3,7 @@ package dev.lazurite.corduroy.testmod.views.subject;
 import dev.lazurite.corduroy.api.view.type.SubjectView;
 import dev.lazurite.corduroy.api.view.type.special.TemporaryView;
 import dev.lazurite.corduroy.api.view.type.special.TickingView;
-import dev.lazurite.corduroy.impl.util.QuaternionHelper;
+import dev.lazurite.toolbox.math.QuaternionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
@@ -23,9 +23,10 @@ public class GlideInView implements SubjectView, TemporaryView, TickingView {
         this.startPosition = subject.getPos().add(new Vec3d(-Math.sin(Math.toRadians(subject.getYaw() + 180)) * distance, distanceY, Math.cos(Math.toRadians(subject.getYaw() + 180)) * distance));
         this.duration = duration;
         this.position = startPosition;
-        Vec3d deltaPos = subject.getPos().subtract(startPosition);
-        float yaw = (float) Math.toDegrees(Math.atan2(deltaPos.z, deltaPos.x)) - 90;
-        float pitch = (float) Math.toDegrees(Math.atan2(deltaPos.y, Math.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z)));
+
+        var deltaPos = subject.getPos().subtract(startPosition);
+        var yaw = (float) Math.toDegrees(Math.atan2(deltaPos.z, deltaPos.x)) - 90;
+        var pitch = (float) Math.toDegrees(Math.atan2(deltaPos.y, Math.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z)));
         this.rotation = QuaternionHelper.rotateX(QuaternionHelper.rotateY(new Quaternion(0, 0, 0, 1), -yaw + 180), -pitch);
     }
 
@@ -56,6 +57,11 @@ public class GlideInView implements SubjectView, TemporaryView, TickingView {
     @Override
     public Entity getSubject() {
         return this.subject;
+    }
+
+    @Override
+    public boolean shouldRenderSubject() {
+        return true;
     }
 
     @Override

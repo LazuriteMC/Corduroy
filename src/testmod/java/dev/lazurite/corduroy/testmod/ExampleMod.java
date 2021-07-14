@@ -1,7 +1,7 @@
 package dev.lazurite.corduroy.testmod;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.testmod.views.subject.GlideInView;
+import dev.lazurite.corduroy.testmod.views.subject.TopDownView;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -30,7 +30,7 @@ public class ExampleMod implements ClientModInitializer {
                 ViewStack.getInstance().peek().ifPresentOrElse(view -> {
                     ViewStack.getInstance().pop();
                 }, () -> {
-                    ViewStack.getInstance().push(new GlideInView(client.player, 10, 5, 60));
+                    ViewStack.getInstance().push(new TopDownView(client.player, 10));//, 5, 60));
                 });
             }
         });

@@ -2,7 +2,7 @@ package dev.lazurite.corduroy.testmod.views.subject;
 
 import dev.lazurite.corduroy.api.view.type.special.TickingView;
 import dev.lazurite.corduroy.api.view.type.SubjectView;
-import dev.lazurite.corduroy.impl.util.QuaternionHelper;
+import dev.lazurite.toolbox.math.QuaternionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
@@ -41,6 +41,11 @@ public class TopDownView implements SubjectView, TickingView {
     @Override
     public Entity getSubject() {
         return this.subject;
+    }
+
+    @Override
+    public boolean shouldRenderSubject() {
+        return true;
     }
 
     @Override
