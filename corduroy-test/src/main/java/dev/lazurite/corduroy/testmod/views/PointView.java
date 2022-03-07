@@ -42,6 +42,11 @@ public class PointView implements TickingView {
     }
 
     @Override
+    public boolean shouldPlayerControl() {
+        return true;
+    }
+
+    @Override
     public Quaternion getRotation() {
         return this.rotation;
     }

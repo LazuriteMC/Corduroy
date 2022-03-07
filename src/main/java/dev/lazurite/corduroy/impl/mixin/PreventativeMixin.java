@@ -10,6 +10,8 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.player.Input;
+import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -127,9 +129,9 @@ public class PreventativeMixin {
                 )
         )
         public void turnPlayer_turn(LocalPlayer player, double cursorDeltaX, double cursorDeltaY) {
-            var view = ViewStack.getInstance().peek();
+            final var view = ViewStack.getInstance().peek();
 
-            if (view.isPresent() && view.get().shouldPlayerControl()) {
+            if (view.isPresent() && !view.get().shouldPlayerControl()) {
                 return;
             }
 
@@ -144,9 +146,50 @@ public class PreventativeMixin {
                 )
         )
         public void onPress_set(InputConstants.Key key, boolean pressed) {
-            if (ViewStack.getInstance().peek().filter(view -> !view.shouldPlayerControl()).isEmpty()) {
-                KeyMapping.set(key, pressed);
+            final var view = ViewStack.getInstance().peek();
+
+            if (view.isPresent() && !view.get().shouldPlayerControl()) {
+                return;
             }
+
+            KeyMapping.set(key, pressed);
+        }
+
+        @Redirect(
+                method = "onPress",
+                at = @At(
+                        value = "INVOKE",
+                        target = "Lnet/minecraft/client/KeyMapping;click(Lcom/mojang/blaze3d/platform/InputConstants$Key;)V"
+                )
+        )
+        public void onPress_click(InputConstants.Key key) {
+            final var view = ViewStack.getInstance().peek();
+
+            if (view.isPresent() && !view.get().shouldPlayerControl()) {
+                return;
+            }
+
+            KeyMapping.click(key);
+        }
+    }
+
+    @Mixin(KeyboardInput.class)
+    public static abstract class KeyboardInputMixin extends Input {
+        @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+        public void tick_HEAD(CallbackInfo info) {
+            ViewStack.getInstance().peek().ifPresent(view -> {
+                if (!view.shouldPlayerControl()) {
+                    forwardImpulse = 0.0f;
+                    leftImpulse = 0.0f;
+                    jumping = false;
+                    shiftKeyDown = false;
+                    up = false;
+                    down = false;
+                    left = false;
+                    right = false;
+                    info.cancel();
+                }
+            });
         }
     }
 }

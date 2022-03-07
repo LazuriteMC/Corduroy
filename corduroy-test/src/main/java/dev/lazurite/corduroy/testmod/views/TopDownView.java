@@ -33,6 +33,11 @@ public class TopDownView implements TickingView {
     }
 
     @Override
+    public boolean shouldPlayerControl() {
+        return true;
+    }
+
+    @Override
     public Vec3 getPosition() {
         return this.position;
     }

@@ -10,7 +10,8 @@
     "LivingEntityMixin",
     "PreventativeMixin$GameRendererMixin",
     "PreventativeMixin$InGameHudMixin",
-    "PreventativeMixin$MouseMixin"
+    "PreventativeMixin$MouseMixin",
+    "PreventativeMixin$KeyboardInputMixin"
   ],
   "injectors": {
     "defaultRequire": 1

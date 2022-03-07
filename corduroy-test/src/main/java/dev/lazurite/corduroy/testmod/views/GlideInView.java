@@ -60,6 +60,11 @@ public class GlideInView implements TemporaryView, TickingView {
     }
 
     @Override
+    public boolean shouldPlayerControl() {
+        return true;
+    }
+
+    @Override
     public int getLifeSpan() {
         return this.duration;
     }
