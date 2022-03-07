@@ -13,15 +13,12 @@
   },
 
   "license": "MIT",
-  "icon": "assets/corduroy/icon.png",
   "environment": "*",
   "mixins": [ "corduroy.mixins.json" ],
-  "accessWidener" : "corduroy.accesswidener",
 
   "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "minecraft": "1.17.x"
+    "fabricloader": ">=0.13",
+    "minecraft": "1.18.x"
   },
 
   "custom": {

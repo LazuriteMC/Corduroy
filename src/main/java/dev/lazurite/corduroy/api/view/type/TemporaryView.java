@@ -1,8 +1,8 @@
-package dev.lazurite.corduroy.api.view.type.special;
+package dev.lazurite.corduroy.api.view.type;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.impl.mixin.ClientWorldMixin;
+import dev.lazurite.corduroy.impl.mixin.ClientLevelMixin;
 
 /**
  * This allows a {@link View} to only temporarily
@@ -11,11 +11,11 @@ import dev.lazurite.corduroy.impl.mixin.ClientWorldMixin;
  * from the {@link ViewStack}.
  *
  * @since 1.0.0
- * @see ClientWorldMixin
+ * @see ClientLevelMixin
  * @see ViewStack
  */
-public interface TemporaryView {
-    default void finish() {
+public interface TemporaryView extends View {
+    default void onExit() {
         ViewStack.getInstance().pop();
     }
 

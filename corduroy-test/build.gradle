@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(path: rootProject.getPath(), configuration: 'namedElements')
+    modImplementation fabricApi.module("fabric-api-base", fabric_api_version), { transitive false }
+    modImplementation fabricApi.module("fabric-lifecycle-events-v1", fabric_api_version), { transitive false }
+    modImplementation fabricApi.module("fabric-key-binding-api-v1", fabric_api_version), { transitive false }
+}

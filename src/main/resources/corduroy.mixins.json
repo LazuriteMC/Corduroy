@@ -2,15 +2,15 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dev.lazurite.corduroy.impl.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "client": [
-    "ClientWorldMixin",
-    "ClientPlayerEntityMixin",
+    "CameraMixin",
+    "ClientLevelMixin",
+    "GameRendererMixin",
     "LivingEntityMixin",
     "PreventativeMixin$GameRendererMixin",
     "PreventativeMixin$InGameHudMixin",
-    "PreventativeMixin$MouseMixin",
-    "WorldRendererMixin"
+    "PreventativeMixin$MouseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

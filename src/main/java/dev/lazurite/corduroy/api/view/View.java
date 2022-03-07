@@ -1,30 +1,33 @@
 package dev.lazurite.corduroy.api.view;
 
+import com.mojang.math.Quaternion;
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.api.view.type.SubjectView;
-import dev.lazurite.corduroy.impl.ViewContainer;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.phys.Vec3;
 
 /**
- * A basic {@link View} object can be pushed onto the {@link ViewStack} indirectly
- * through the use of {@link ViewContainer}s. What this allows you to do is apply
- * custom behavior to the camera being used on-screen and creates a much more
- * flexible way to control what the player of Minecraft sees.
+ * A basic {@link View} object can be pushed onto the {@link ViewStack}.
+ * What this allows you to do is apply custom behavior to the camera
+ * being used on-screen and creates a much more flexible way to control
+ * what the player sees.
  *
  * @since 1.0.0
- * @see SubjectView
  */
 public interface View {
-    Vec3d getPosition();
+    Vec3 getPosition();
     Quaternion getRotation();
 
-    default boolean shouldRenderHand() {
+    default Camera getCamera() {
+        return Minecraft.getInstance().gameRenderer.getMainCamera();
+    }
+
+    default boolean shouldRenderTarget() {
         return false;
     }
 
-    default boolean shouldRenderPlayer() {
-        return true;
+    default boolean shouldRenderHand() {
+        return false;
     }
 
     default boolean shouldRenderHud() {

@@ -1,4 +1,0 @@
-accessWidener v1 named
-mutable field net/minecraft/client/render/GameRenderer camera Lnet/minecraft/client/render/Camera;
-accessible field net/minecraft/client/render/GameRenderer camera Lnet/minecraft/client/render/Camera;
-accessible field net/minecraft/client/render/Camera focusedEntity Lnet/minecraft/entity/Entity;

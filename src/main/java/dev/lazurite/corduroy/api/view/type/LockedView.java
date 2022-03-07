@@ -1,4 +1,4 @@
-package dev.lazurite.corduroy.api.view.type.special;
+package dev.lazurite.corduroy.api.view.type;
 
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
@@ -11,7 +11,7 @@ import dev.lazurite.corduroy.api.view.View;
  * @since 1.0.0
  * @see ViewStack#isLocked
  */
-public interface LockedView {
+public interface LockedView extends View {
     default void unlock() {
         ViewStack.getInstance().unlock();
         ViewStack.getInstance().pop();

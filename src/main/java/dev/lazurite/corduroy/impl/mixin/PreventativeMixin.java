@@ -1,114 +1,105 @@
 package dev.lazurite.corduroy.impl.mixin;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.impl.ViewContainer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.Mouse;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.BufferBuilderStorage;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
-import org.spongepowered.asm.mixin.Final;
+import dev.lazurite.corduroy.api.view.View;
+import net.minecraft.client.Camera;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.MouseHandler;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Environment(EnvType.CLIENT)
 public class PreventativeMixin {
 
     @Mixin(GameRenderer.class)
     public static class GameRendererMixin {
-        @Shadow @Final private MinecraftClient client;
-        @Shadow public Camera camera;
-
-        @Inject(method = "<init>", at = @At("RETURN"))
-        public void init(MinecraftClient client, ResourceManager resourceManager, BufferBuilderStorage bufferBuilderStorage, CallbackInfo info) {
-            ViewStack.create(client, camera);
-        }
-
-        @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
-        public void renderHand(MatrixStack matrices, Camera camera, float tickDelta, CallbackInfo info) {
-            if (camera instanceof ViewContainer) {
-                if (!((ViewContainer) camera).getView().shouldRenderHand()) {
+        /**
+         * @see View#shouldRenderHand
+         */
+        @Inject(method = "renderItemInHand", at = @At("HEAD"), cancellable = true)
+        public void renderHand_HEAD(PoseStack matrices, Camera camera, float tickDelta, CallbackInfo info) {
+            ViewStack.getInstance().peek().ifPresent(view -> {
+                if (!view.shouldRenderHand()) {
                     info.cancel();
                 }
-            }
+            });
         }
 
+        /**
+         * @see View#shouldBobView
+         */
         @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
-        public void bobView(MatrixStack stack, float f, CallbackInfo info) {
-            if (camera instanceof ViewContainer) {
-                if (!((ViewContainer) camera).getView().shouldBobView()) {
+        public void bobView(PoseStack stack, float f, CallbackInfo info) {
+            ViewStack.getInstance().peek().ifPresent(view -> {
+                if (!view.shouldBobView()) {
                     info.cancel();
                 }
-            }
+            });
         }
 
-        @Inject(method = "bobViewWhenHurt", at = @At("HEAD"), cancellable = true)
-        private void bobViewWhenHurt(MatrixStack stack, float f, CallbackInfo info) {
-            if (camera instanceof ViewContainer) {
-                if (!((ViewContainer) camera).getView().shouldBobView()) {
+        /**
+         * @see View#shouldBobView
+         */
+        @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
+        private void bobViewWhenHurt(PoseStack stack, float f, CallbackInfo info) {
+            ViewStack.getInstance().peek().ifPresent(view -> {
+                if (!view.shouldBobView()) {
                     info.cancel();
                 }
-            }
+            });
         }
 
-        @Inject(method = "updateMovementFovMultiplier", at = @At("HEAD"), cancellable = true)
-        private void updateMovementFovMultiplier(CallbackInfo info) {
-            if (camera instanceof ViewContainer) {
-                if (!((ViewContainer) camera).getView().shouldPlayerControl()) {
+        @Inject(method = "tickFov", at = @At("HEAD"), cancellable = true)
+        private void tickFov_HEAD(CallbackInfo info) {
+            ViewStack.getInstance().peek().ifPresent(view -> {
+                if (!view.shouldPlayerControl()) {
                     info.cancel();
                 }
-            }
+            });
         }
 
         @Redirect(
-                method = "renderWorld",
+                method = "renderLevel",
                 at = @At(
                         value = "INVOKE",
-                        target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lnet/minecraft/util/math/Quaternion;)V",
+                        target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lcom/mojang/math/Quaternion;)V",
                         ordinal = 2
                 )
         )
-        public void pitch(MatrixStack stack, Quaternion quaternion) {
-            if (!(client.gameRenderer.getCamera() instanceof ViewContainer)) {
-                stack.multiply(quaternion);
+        public void renderLevel_mulPose_Pitch(PoseStack stack, Quaternion quaternion) {
+            if (ViewStack.getInstance().peek().isEmpty()) {
+                stack.mulPose(quaternion);
             }
         }
 
         @Redirect(
-                method = "renderWorld",
+                method = "renderLevel",
                 at = @At(
                         value = "INVOKE",
-                        target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lnet/minecraft/util/math/Quaternion;)V",
+                        target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lcom/mojang/math/Quaternion;)V",
                         ordinal = 3
                 )
         )
-        public void yaw(MatrixStack stack, Quaternion quaternion) {
-            if (!(client.gameRenderer.getCamera() instanceof ViewContainer)) {
-                stack.multiply(quaternion);
-            } else {
-                stack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
-            }
+        public void renderLevel_mulPose_Yaw(PoseStack stack, Quaternion quaternion) {
+            ViewStack.getInstance().peek().ifPresentOrElse(
+                    view -> stack.mulPose(Vector3f.YN.rotationDegrees(180)),
+                    () -> stack.mulPose(quaternion));
         }
     }
 
-    @Mixin(InGameHud.class)
+    @Mixin(Gui.class)
     public static class InGameHudMixin {
         @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
-        protected void renderHotbar(float tickDelta, MatrixStack matrices, CallbackInfo info) {
+        protected void renderHotbar_HEAD(float tickDelta, PoseStack matrices, CallbackInfo info) {
             ViewStack.getInstance().peek().ifPresent(view -> {
                 if (!view.shouldRenderHud()) {
                     info.cancel();
@@ -117,7 +108,7 @@ public class PreventativeMixin {
         }
 
         @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-        private void renderCrosshair(MatrixStack matrices, CallbackInfo info) {
+        private void renderCrosshair_HEAD(PoseStack matrices, CallbackInfo info) {
             ViewStack.getInstance().peek().ifPresent(view -> {
                 if (!view.shouldRenderHud()) {
                     info.cancel();
@@ -126,57 +117,36 @@ public class PreventativeMixin {
         }
     }
 
-    @Mixin(Mouse.class)
+    @Mixin(MouseHandler.class)
     public static class MouseMixin {
         @Redirect(
-                method = "updateMouse",
+                method = "turnPlayer",
                 at = @At(
                         value = "INVOKE",
-                        target = "Lnet/minecraft/client/network/ClientPlayerEntity;changeLookDirection(DD)V"
+                        target = "Lnet/minecraft/client/player/LocalPlayer;turn(DD)V"
                 )
         )
-        public void changeLookDirection(ClientPlayerEntity player, double cursorDeltaX, double cursorDeltaY) {
+        public void turnPlayer_turn(LocalPlayer player, double cursorDeltaX, double cursorDeltaY) {
             var view = ViewStack.getInstance().peek();
 
             if (view.isPresent() && view.get().shouldPlayerControl()) {
                 return;
             }
 
-            player.changeLookDirection(cursorDeltaX, cursorDeltaY);
+            player.turn(cursorDeltaX, cursorDeltaY);
         }
 
         @Redirect(
-                method = "onMouseButton",
+                method = "onPress",
                 at = @At(
                         value = "INVOKE",
-                        target = "Lnet/minecraft/client/option/KeyBinding;setKeyPressed(Lnet/minecraft/client/util/InputUtil$Key;Z)V"
+                        target = "Lnet/minecraft/client/KeyMapping;set(Lcom/mojang/blaze3d/platform/InputConstants$Key;Z)V"
                 )
         )
-        public void setKeyPressed(InputUtil.Key key, boolean pressed) {
-            var view = ViewStack.getInstance().peek();
-
-            if (view.isPresent() && view.get().shouldPlayerControl()) {
-                return;
+        public void onPress_set(InputConstants.Key key, boolean pressed) {
+            if (ViewStack.getInstance().peek().filter(view -> !view.shouldPlayerControl()).isEmpty()) {
+                KeyMapping.set(key, pressed);
             }
-
-            KeyBinding.setKeyPressed(key, pressed);
-        }
-
-        @Redirect(
-                method = "onMouseButton",
-                at = @At(
-                        value = "INVOKE",
-                        target = "Lnet/minecraft/client/option/KeyBinding;onKeyPressed(Lnet/minecraft/client/util/InputUtil$Key;)V"
-                )
-        )
-        public void onKeyPressed(InputUtil.Key key) {
-            var view = ViewStack.getInstance().peek();
-
-            if (view.isPresent() && view.get().shouldPlayerControl()) {
-                return;
-            }
-
-            KeyBinding.onKeyPressed(key);
         }
     }
 }
