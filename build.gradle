@@ -6,7 +6,7 @@ plugins {
 allprojects {
 	apply plugin: 'fabric-loom'
 
-	version mod_version
+	version corduroy_version
 	group maven_group
 	jar.from 'LICENSE'
 
