@@ -4,6 +4,7 @@ import com.mojang.math.Quaternion;
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.impl.util.QuaternionUtil;
 import net.minecraft.client.Camera;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
@@ -25,6 +26,8 @@ public abstract class CameraMixin {
     @Shadow protected abstract void setPosition(Vec3 vec3);
     @Shadow public abstract Vec3 getPosition();
     @Shadow public abstract Quaternion rotation();
+
+    @Shadow private Vec3 position;
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick_HEAD(CallbackInfo info) {
@@ -88,5 +91,16 @@ public abstract class CameraMixin {
         if (ViewStack.getInstance().peek().isPresent()) {
             info.setReturnValue(this.orientation);
         }
+    }
+
+    @Inject(method = "reset", at = @At("TAIL"))
+    public void reset(CallbackInfo info) {
+        this.prevOrientation = new Quaternion(this.orientation);
+        this.prevPosition = new Vec3(this.position.x, this.position.y, this.position.z);
+    }
+
+    @Inject(method = "getBlockPosition", at = @At("HEAD"), cancellable = true)
+    public void getBlockPosition(CallbackInfoReturnable<BlockPos> info) {
+        info.setReturnValue(new BlockPos(this.position));
     }
 }
