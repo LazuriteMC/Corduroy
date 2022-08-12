@@ -7,11 +7,13 @@
     "CameraMixin",
     "ClientLevelMixin",
     "GameRendererMixin",
+    "LevelRendererMixin",
     "LivingEntityMixin",
+    "MinecraftMixin",
     "PreventativeMixin$GameRendererMixin",
     "PreventativeMixin$InGameHudMixin",
-    "PreventativeMixin$MouseMixin",
-    "PreventativeMixin$KeyboardInputMixin"
+    "PreventativeMixin$KeyboardInputMixin",
+    "PreventativeMixin$MouseMixin"
   ],
   "injectors": {
     "defaultRequire": 1
