@@ -1,33 +1,33 @@
 package dev.lazurite.corduroy.impl.util;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 public class QuaternionUtil {
-    public static float getYaw(Quaternion quat) {
+    public static float getYaw(Quaternionf quat) {
         return -1 * (float) Math.toDegrees(toEulerAngles(quat).z());
     }
 
-    public static float getPitch(Quaternion quat) {
+    public static float getPitch(Quaternionf quat) {
         return (float) Math.toDegrees(toEulerAngles(quat).y());
     }
 
-    public static float getRoll(Quaternion quat) {
+    public static float getRoll(Quaternionf quat) {
         return (float) Math.toDegrees(toEulerAngles(quat).x());
     }
 
-    public static Quaternion slerp(Quaternion q1, Quaternion q2, float t) {
+    public static Quaternionf slerp(Quaternionf q1, Quaternionf q2, float t) {
         q1.normalize();
         q2.normalize();
 
-        if (q1.i() == q2.i() && q1.j() == q2.j() && q1.k() == q2.k() && q1.r() == q2.r()) {
-            return new Quaternion(q1.i(), q1.j(), q1.k(), q1.r());
+        if (q1.x() == q2.x() && q1.y() == q2.y() && q1.z() == q2.z() && q1.w() == q2.w()) {
+            return new Quaternionf(q1.x(), q1.y(), q1.z(), q1.w());
         }
 
-        var result = (q1.i() * q2.i()) + (q1.j() * q2.j()) + (q1.k() * q2.k()) + (q1.r() * q2.r());
+        var result = (q1.x() * q2.x()) + (q1.y() * q2.y()) + (q1.z() * q2.z()) + (q1.w() * q2.w());
 
         if (result < 0.0f) {
-            q2.set(-q2.i(), -q2.j(), -q2.k(), -q2.r());
+            q2.set(-q2.x(), -q2.y(), -q2.z(), -q2.w());
             result = -result;
         }
 
@@ -42,37 +42,37 @@ public class QuaternionUtil {
             scale1 = (float) Math.sin((t * theta)) * invSinTheta;
         }
 
-        final var out = new Quaternion(
-                (scale0 * q1.i()) + (scale1 * q2.i()),
-                (scale0 * q1.j()) + (scale1 * q2.j()),
-                (scale0 * q1.k()) + (scale1 * q2.k()),
-                (scale0 * q1.r()) + (scale1 * q2.r()));
+        final var out = new Quaternionf(
+                (scale0 * q1.x()) + (scale1 * q2.x()),
+                (scale0 * q1.y()) + (scale1 * q2.y()),
+                (scale0 * q1.z()) + (scale1 * q2.z()),
+                (scale0 * q1.w()) + (scale1 * q2.w()));
 
         out.normalize();
         return out;
     }
 
-    public static Vector3f toEulerAngles(Quaternion quat) {
-        final var q = new Quaternion(Quaternion.ONE);
-        q.set(quat.i(), quat.j(), quat.k(), quat.r());
+    public static Vector3f toEulerAngles(Quaternionf quat) {
+        final var q = new Quaternionf(0, 0, 0, 1);
+        q.set(quat.x(), quat.y(), quat.z(), quat.w());
 
         var i = 0.0f;
         var j = 0.0f;
         var k = 0.0f;
 
         // roll (x-axis rotation)
-        final var sinr_cosp = 2 * (q.r() * q.i() + q.j() * q.k());
-        final var cosr_cosp = 1 - 2 * (q.i() * q.i() + q.j() * q.j());
+        final var sinr_cosp = 2 * (q.w() * q.x() + q.y() * q.z());
+        final var cosr_cosp = 1 - 2 * (q.x() * q.x() + q.y() * q.y());
         i = (float) Math.atan2(sinr_cosp, cosr_cosp);
 
         // pitch (y-axis rotation)
-        final var sinp = 2 * (q.r() * q.j() - q.k() * q.i());
+        final var sinp = 2 * (q.w() * q.y() - q.z() * q.x());
         if (Math.abs(sinp) >= 1) j = (float) Math.copySign(Math.PI / 2, sinp); // use 90 degrees if out of range
         else j = (float) Math.asin(sinp);
 
         // yaw (z-axis rotation)
-        final var siny_cosp = 2 * (q.r() * q.k() + q.i() * q.j());
-        final var cosy_cosp = 1 - 2 * (q.j() * q.j() + q.k() * q.k());
+        final var siny_cosp = 2 * (q.w() * q.z() + q.x() * q.y());
+        final var cosy_cosp = 1 - 2 * (q.y() * q.y() + q.z() * q.z());
         k = (float) Math.atan2(siny_cosp, cosy_cosp);
 
         return new Vector3f(i, j ,k);

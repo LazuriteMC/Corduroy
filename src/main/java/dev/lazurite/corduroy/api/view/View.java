@@ -1,10 +1,10 @@
 package dev.lazurite.corduroy.api.view;
 
-import com.mojang.math.Quaternion;
 import dev.lazurite.corduroy.api.ViewStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 
 /**
  * A basic {@link View} object can be pushed onto the {@link ViewStack}.
@@ -16,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public interface View {
     Vec3 getPosition();
-    Quaternion getRotation();
+    Quaternionf getRotation();
 
     default Camera getCamera() {
         return Minecraft.getInstance().gameRenderer.getMainCamera();

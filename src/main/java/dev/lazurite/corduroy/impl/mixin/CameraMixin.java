@@ -1,7 +1,5 @@
 package dev.lazurite.corduroy.impl.mixin;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.impl.util.QuaternionUtil;
 import net.minecraft.client.Camera;
@@ -10,6 +8,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,8 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class CameraMixin {
     @Unique private Vec3 position = new Vec3(0, 0, 0);
     @Unique private Vec3 prevPosition = new Vec3(0, 0, 0);
-    @Unique private Quaternion orientation = new Quaternion(Quaternion.ONE);
-    @Unique private Quaternion prevOrientation = new Quaternion(Quaternion.ONE);
+    @Unique private Quaternionf orientation = new Quaternionf(0, 0, 0, 1);
+    @Unique private Quaternionf prevOrientation = new Quaternionf(0, 0, 0, 1);
 
     @Shadow @Final private Vector3f forwards;
 
@@ -35,7 +35,7 @@ public abstract class CameraMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick_HEAD(CallbackInfo info) {
         ViewStack.getInstance().peek().ifPresent(view -> {
-            this.prevOrientation = new Quaternion(view.getRotation());
+            this.prevOrientation = new Quaternionf(view.getRotation());
 
             final var pos = view.getPosition();
             this.prevPosition = new Vec3(pos.x, pos.y, pos.z);
@@ -45,7 +45,7 @@ public abstract class CameraMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
     public void init(CallbackInfo info) {
         this.prevPosition = Vec3.ZERO;
-        this.prevOrientation = new Quaternion(Quaternion.ONE);
+        this.prevOrientation = new Quaternionf(0, 0, 0, 1);
     }
 
     @Inject(method = "isDetached", at = @At("HEAD"), cancellable = true)
@@ -69,14 +69,14 @@ public abstract class CameraMixin {
             final var z = Mth.lerp(f, prevPosition.z, pos.z);
             this.position = new Vec3(x, y, z);
 
-            this.orientation = new Quaternion(QuaternionUtil.slerp(prevOrientation, view.getRotation(), f));
+            this.orientation = new Quaternionf(QuaternionUtil.slerp(prevOrientation, view.getRotation(), f));
 
             this.forwards.set(0.0F, 0.0F, 1.0F);
-            this.forwards.transform(this.orientation);
+            this.forwards.rotate(this.orientation);
             this.up.set(0.0F, 1.0F, 0.0F);
-            this.up.transform(this.orientation);
+            this.up.rotate(this.orientation);
             this.left.set(1.0F, 0.0F, 0.0F);
-            this.left.transform(this.orientation);
+            this.left.rotate(this.orientation);
             info.cancel();
         });
     }
@@ -96,7 +96,7 @@ public abstract class CameraMixin {
     }
 
     @Inject(method = "rotation", at = @At("RETURN"), cancellable = true)
-    public void rotation_RETURN(CallbackInfoReturnable<Quaternion> info) {
+    public void rotation_RETURN(CallbackInfoReturnable<Quaternionf> info) {
         if (ViewStack.getInstance().peek().isPresent()) {
             info.setReturnValue(this.orientation);
         }
@@ -104,7 +104,7 @@ public abstract class CameraMixin {
 
     @Inject(method = "reset", at = @At("TAIL"))
     public void reset(CallbackInfo info) {
-        this.prevOrientation = new Quaternion(this.orientation);
+        this.prevOrientation = new Quaternionf(this.orientation);
         this.prevPosition = new Vec3(this.position.x, this.position.y, this.position.z);
     }
 

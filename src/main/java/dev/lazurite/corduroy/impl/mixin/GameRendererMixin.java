@@ -1,13 +1,13 @@
 package dev.lazurite.corduroy.impl.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.GameRenderer;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,13 +26,13 @@ public class GameRendererMixin {
     @Inject(method = "renderLevel", at = @At("HEAD"))
     public void renderLevel_HEAD(float f, long l, PoseStack poseStack, CallbackInfo info) {
         ViewStack.getInstance().peek().ifPresent(view -> {
-            final var q = new Quaternion(mainCamera.rotation());
-            q.mul(Vector3f.YP.rotationDegrees(180));
-            q.set(q.i(), -q.j(), q.k(), -q.r());
+            final var q = new Quaternionf(mainCamera.rotation());
+            q.mul(Axis.YP.rotationDegrees(180));
+            q.set(q.x(), -q.y(), q.z(), -q.w());
 
-            final var newMat = new Matrix4f(q);
+            final var newMat = new Matrix4f().set(q);
             newMat.transpose();
-            poseStack.last().pose().multiply(newMat);
+            poseStack.last().pose().mul(newMat);
         });
     }
 }

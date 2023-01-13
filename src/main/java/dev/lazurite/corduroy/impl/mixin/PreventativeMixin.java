@@ -2,8 +2,7 @@ package dev.lazurite.corduroy.impl.mixin;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
 import net.minecraft.client.Camera;
@@ -14,6 +13,7 @@ import net.minecraft.client.player.Input;
 import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import org.joml.Quaternionf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -73,11 +73,11 @@ public class PreventativeMixin {
                 method = "renderLevel",
                 at = @At(
                         value = "INVOKE",
-                        target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lcom/mojang/math/Quaternion;)V",
+                        target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
                         ordinal = 2
                 )
         )
-        public void renderLevel_mulPose_Pitch(PoseStack stack, Quaternion quaternion) {
+        public void renderLevel$mulPose$Pitch(PoseStack stack, Quaternionf quaternion) {
             if (ViewStack.getInstance().peek().isEmpty()) {
                 stack.mulPose(quaternion);
             }
@@ -87,13 +87,13 @@ public class PreventativeMixin {
                 method = "renderLevel",
                 at = @At(
                         value = "INVOKE",
-                        target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lcom/mojang/math/Quaternion;)V",
+                        target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
                         ordinal = 3
                 )
         )
-        public void renderLevel_mulPose_Yaw(PoseStack stack, Quaternion quaternion) {
+        public void renderLevel$mulPose$Yaw(PoseStack stack, Quaternionf quaternion) {
             ViewStack.getInstance().peek().ifPresentOrElse(
-                    view -> stack.mulPose(Vector3f.YN.rotationDegrees(180)),
+                    view -> stack.mulPose(Axis.YN.rotationDegrees(180)),
                     () -> stack.mulPose(quaternion));
         }
     }

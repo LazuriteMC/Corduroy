@@ -1,10 +1,10 @@
-package dev.lazurite.corduroy.testmod;
+package dev.lazurite.corduroy.examplemod;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.lazurite.corduroy.api.ViewStack;
-import dev.lazurite.corduroy.testmod.views.GlideInView;
-import dev.lazurite.corduroy.testmod.views.PointView;
-import dev.lazurite.corduroy.testmod.views.TopDownView;
+import dev.lazurite.corduroy.examplemod.views.GlideInView;
+import dev.lazurite.corduroy.examplemod.views.PointView;
+import dev.lazurite.corduroy.examplemod.views.TopDownView;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;

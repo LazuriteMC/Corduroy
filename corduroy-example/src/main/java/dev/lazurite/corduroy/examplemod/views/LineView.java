@@ -1,6 +1,5 @@
-package dev.lazurite.corduroy.testmod.views;
+package dev.lazurite.corduroy.examplemod.views;
 
-import com.mojang.math.Quaternion;
 import dev.lazurite.corduroy.api.ViewStack;
 import dev.lazurite.corduroy.api.view.View;
 import dev.lazurite.corduroy.api.view.type.TemporaryView;
@@ -8,6 +7,7 @@ import dev.lazurite.corduroy.api.view.type.TickingView;
 import dev.lazurite.corduroy.impl.util.QuaternionUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 
 /**
  * A view that travels in a straight line for a given amount of ticks.
@@ -20,19 +20,19 @@ import net.minecraft.world.phys.Vec3;
 public class LineView implements TickingView, TemporaryView {
     private final Vec3 startPosition;
     private final Vec3 endPosition;
-    private final Quaternion startOrientation;
-    private final Quaternion endOrientation;
+    private final Quaternionf startOrientation;
+    private final Quaternionf endOrientation;
     private final int lifeSpan;
 
     private Vec3 position;
-    private Quaternion rotation;
+    private Quaternionf rotation;
     private int age;
 
     public LineView(Vec3 startPosition, Vec3 endPosition, int lifeSpan) {
-        this(startPosition, endPosition, Quaternion.ONE, Quaternion.ONE, lifeSpan);
+        this(startPosition, endPosition, new Quaternionf(0, 0, 0, 1), new Quaternionf(0, 0, 0, 1), lifeSpan);
     }
 
-    public LineView(Vec3 startPosition, Vec3 endPosition, Quaternion startOrientation, Quaternion endOrientation, int lifeSpan) {
+    public LineView(Vec3 startPosition, Vec3 endPosition, Quaternionf startOrientation, Quaternionf endOrientation, int lifeSpan) {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
         this.startOrientation = startOrientation;
@@ -74,7 +74,7 @@ public class LineView implements TickingView, TemporaryView {
     }
 
     @Override
-    public Quaternion getRotation() {
+    public Quaternionf getRotation() {
         return this.rotation;
     }
 }

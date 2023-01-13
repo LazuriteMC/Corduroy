@@ -1,15 +1,15 @@
-package dev.lazurite.corduroy.testmod.views;
+package dev.lazurite.corduroy.examplemod.views;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import dev.lazurite.corduroy.api.view.type.TemporaryView;
 import dev.lazurite.corduroy.api.view.type.TickingView;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 
 public class GlideInView implements TemporaryView, TickingView {
     private final Vec3 startPosition;
-    private Quaternion rotation;
+    private Quaternionf rotation;
     private Vec3 position;
     private int duration;
     private int age;
@@ -24,8 +24,8 @@ public class GlideInView implements TemporaryView, TickingView {
         final var deltaPos = entity.position().subtract(startPosition);
         final var yaw = (float) Math.toDegrees(Math.atan2(deltaPos.z, deltaPos.x)) - 90;
         final var pitch = (float) Math.toDegrees(Math.atan2(deltaPos.y, Math.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z)));
-        this.rotation = Vector3f.YP.rotationDegrees(-yaw + 180);
-        this.rotation.mul(Vector3f.XP.rotationDegrees(pitch));
+        this.rotation = Axis.YP.rotationDegrees(-yaw + 180);
+        this.rotation.mul(Axis.XP.rotationDegrees(pitch));
     }
 
     @Override
@@ -40,8 +40,8 @@ public class GlideInView implements TemporaryView, TickingView {
         final var deltaPos = entity.position().subtract(startPosition);
         final var yaw = (float) Math.toDegrees(Math.atan2(deltaPos.z, deltaPos.x)) - 90;
         final var pitch = (float) Math.toDegrees(Math.atan2(deltaPos.y, Math.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z)));
-        this.rotation = Vector3f.YP.rotationDegrees(-yaw + 180);
-        this.rotation.mul(Vector3f.XP.rotationDegrees(pitch));
+        this.rotation = Axis.YP.rotationDegrees(-yaw + 180);
+        this.rotation.mul(Axis.XP.rotationDegrees(pitch));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class GlideInView implements TemporaryView, TickingView {
     }
 
     @Override
-    public Quaternion getRotation() {
+    public Quaternionf getRotation() {
         return this.rotation;
     }
 

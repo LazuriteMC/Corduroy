@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "testmod",
+  "id": "corduroy_example_mod",
   "version": "${version}",
 
   "name": "Corduroy Example Mod",
@@ -11,12 +11,12 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "dev.lazurite.corduroy.testmod.ExampleMod"
+      "dev.lazurite.corduroy.examplemod.ExampleMod"
     ]
   },
 
   "depends": {
     "fabricloader": ">=0.14",
-    "minecraft": ">=1.19"
+    "minecraft": ">=1.19.3"
   }
 }
