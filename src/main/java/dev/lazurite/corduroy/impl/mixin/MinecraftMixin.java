@@ -11,57 +11,62 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
+
     @Redirect(
             method = "tick",
+            require = 0,
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/player/LocalPlayer;getBlockX()I"
             )
     )
-    public final int tick_getBlockX(LocalPlayer player) {
+    public final int tick$getBlockX(LocalPlayer player) {
         if (ViewStack.getInstance().peek().isPresent()) {
-            return (int) ViewStack.getInstance().peek().get().getPosition().x();
+            return (int) ViewStack.getInstance().peek().get().getPosition(1.0f).x();
         }
 
-        return Minecraft.getInstance().getCameraEntity().blockPosition().getX();
+        return player.getBlockX();
     }
 
     @Redirect(
             method = "tick",
+            require = 0,
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/player/LocalPlayer;getBlockY()I"
             )
     )
-    public final int tick_getBlockY(LocalPlayer player) {
+    public final int tick$getBlockY(LocalPlayer player) {
         if (ViewStack.getInstance().peek().isPresent()) {
-            return (int) ViewStack.getInstance().peek().get().getPosition().y();
+            return (int) ViewStack.getInstance().peek().get().getPosition(1.0f).y();
         }
 
-        return Minecraft.getInstance().getCameraEntity().blockPosition().getY();
+        return player.getBlockY();
     }
 
     @Redirect(
             method = "tick",
+            require = 0,
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/player/LocalPlayer;getBlockZ()I"
             )
     )
-    public final int tick_getBlockZ(LocalPlayer player) {
+    public final int tick$getBlockZ(LocalPlayer player) {
         if (ViewStack.getInstance().peek().isPresent()) {
-            return (int) ViewStack.getInstance().peek().get().getPosition().z();
+            return (int) ViewStack.getInstance().peek().get().getPosition(1.0f).z();
         }
 
-        return Minecraft.getInstance().getCameraEntity().blockPosition().getZ();
+        return player.getBlockZ();
     }
 
     @ModifyArgs(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;animateTick(III)V"))
     public void doRandomBlockDisplayTicks(Args args) {
         ViewStack.getInstance().peek().ifPresent(view -> {
-            args.set(0, (int) view.getPosition().x());
-            args.set(0, (int) view.getPosition().y());
-            args.set(0, (int) view.getPosition().z());
+            args.set(0, (int) view.getPosition(1.0f).x());
+            args.set(1, (int) view.getPosition(1.0f).y());
+            args.set(2, (int) view.getPosition(1.0f).z());
         });
     }
+
 }

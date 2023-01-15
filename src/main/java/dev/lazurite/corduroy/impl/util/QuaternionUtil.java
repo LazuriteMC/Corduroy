@@ -3,17 +3,17 @@ package dev.lazurite.corduroy.impl.util;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+/**
+ * Some handy quaternion functions.
+ */
 public class QuaternionUtil {
+
     public static float getYaw(Quaternionf quat) {
         return -1 * (float) Math.toDegrees(toEulerAngles(quat).z());
     }
 
     public static float getPitch(Quaternionf quat) {
         return (float) Math.toDegrees(toEulerAngles(quat).y());
-    }
-
-    public static float getRoll(Quaternionf quat) {
-        return (float) Math.toDegrees(toEulerAngles(quat).x());
     }
 
     public static Quaternionf slerp(Quaternionf q1, Quaternionf q2, float t) {
@@ -77,4 +77,5 @@ public class QuaternionUtil {
 
         return new Vector3f(i, j ,k);
     }
+
 }

@@ -1,7 +1,6 @@
 package dev.lazurite.corduroy.impl.mixin;
 
 import dev.lazurite.corduroy.api.ViewStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,48 +9,53 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
+
     @Redirect(
             method = "setupRender",
+            require = 0,
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/player/LocalPlayer;getX()D"
             )
     )
-    public final double setupRender_getX(LocalPlayer player) {
+    public double setupRender$getX(LocalPlayer player) {
         if (ViewStack.getInstance().peek().isPresent()) {
-            return ViewStack.getInstance().peek().get().getPosition().x();
+            return ViewStack.getInstance().peek().get().getPosition(1.0f).x();
         }
 
-        return Minecraft.getInstance().getCameraEntity().getX();
+        return player.getX();
     }
 
     @Redirect(
             method = "setupRender",
+            require = 0,
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/player/LocalPlayer;getY()D"
             )
     )
-    public final double setupRender_getY(LocalPlayer player) {
+    public double setupRender$getY(LocalPlayer player) {
         if (ViewStack.getInstance().peek().isPresent()) {
-            return ViewStack.getInstance().peek().get().getPosition().y();
+            return ViewStack.getInstance().peek().get().getPosition(1.0f).y();
         }
 
-        return Minecraft.getInstance().getCameraEntity().getZ();
+        return player.getY();
     }
 
     @Redirect(
             method = "setupRender",
+            require = 0,
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/player/LocalPlayer;getZ()D"
             )
     )
-    public final double setupRender_getZ(LocalPlayer player) {
+    public double setupRender$getZ(LocalPlayer player) {
         if (ViewStack.getInstance().peek().isPresent()) {
-            return ViewStack.getInstance().peek().get().getPosition().z();
+            return ViewStack.getInstance().peek().get().getPosition(1.0f).z();
         }
 
-        return Minecraft.getInstance().getCameraEntity().getZ();
+        return player.getZ();
     }
+
 }

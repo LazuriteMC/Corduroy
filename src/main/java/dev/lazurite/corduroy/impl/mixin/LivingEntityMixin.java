@@ -10,13 +10,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
-    @Inject(method = "kill", at = @At("HEAD"))
-    public void kill_HEAD(CallbackInfo info) {
-        final var entity = (LivingEntity) (Object) this;
 
-        /* If you die, go back to the main player view. */
-        if (entity instanceof LocalPlayer) {
+    /**
+     * Resets the {@link ViewStack} if the local player dies.
+     */
+    @Inject(method = "kill", at = @At("HEAD"))
+    public void kill$HEAD(CallbackInfo ci) {
+        if ((LivingEntity) (Object) this instanceof LocalPlayer) {
             ViewStack.getInstance().clear();
         }
     }
+
 }

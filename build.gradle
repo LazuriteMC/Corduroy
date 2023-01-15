@@ -3,6 +3,10 @@ plugins {
 	id 'maven-publish'
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/corduroy.accessWidener")
+}
+
 allprojects {
 	apply plugin: 'fabric-loom'
 

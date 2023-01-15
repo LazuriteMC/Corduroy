@@ -4,16 +4,13 @@
   "package": "dev.lazurite.corduroy.impl.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "CameraMixin",
-    "ClientLevelMixin",
     "GameRendererMixin",
+    "GuiMixin",
+    "KeyboardInputMixin",
     "LevelRendererMixin",
     "LivingEntityMixin",
     "MinecraftMixin",
-    "PreventativeMixin$GameRendererMixin",
-    "PreventativeMixin$InGameHudMixin",
-    "PreventativeMixin$KeyboardInputMixin",
-    "PreventativeMixin$MouseMixin"
+    "MouseHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

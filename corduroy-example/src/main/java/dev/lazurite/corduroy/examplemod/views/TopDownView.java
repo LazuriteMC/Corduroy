@@ -1,14 +1,12 @@
 package dev.lazurite.corduroy.examplemod.views;
 
 import com.mojang.math.Axis;
-import dev.lazurite.corduroy.api.view.type.TickingView;
+import dev.lazurite.corduroy.api.View;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 
-public class TopDownView implements TickingView {
-    private Quaternionf orientation;
-    private Vec3 position;
-    private float height;
+public class TopDownView extends View implements View.Ticking {
+
+    private final float height;
 
     public TopDownView(float height) {
         this.height = height;
@@ -18,13 +16,9 @@ public class TopDownView implements TickingView {
     @Override
     public void tick() {
         final var entity = getCamera().getEntity();
-        this.position = entity.position().add(new Vec3(0, height, 0));
-        this.orientation = Axis.YN.rotationDegrees(entity.getYRot() + 180);
-        this.orientation.mul(Axis.XN.rotationDegrees(90));
-    }
-
-    public float getHeight() {
-        return this.height;
+        this.position = entity.position().add(new Vec3(0, this.height, 0));
+        this.rotation = Axis.YN.rotationDegrees(entity.getYRot() + 180);
+        this.rotation.mul(Axis.XN.rotationDegrees(90));
     }
 
     @Override
@@ -37,13 +31,4 @@ public class TopDownView implements TickingView {
         return true;
     }
 
-    @Override
-    public Vec3 getPosition() {
-        return this.position;
-    }
-
-    @Override
-    public Quaternionf getRotation() {
-        return this.orientation;
-    }
 }

@@ -1,77 +1,57 @@
 package dev.lazurite.corduroy.api;
 
-import dev.lazurite.corduroy.api.view.View;
-import dev.lazurite.corduroy.api.view.type.LockedView;
+import dev.lazurite.corduroy.impl.ViewStackImpl;
+import net.minecraft.client.Camera;
 
 import java.util.Optional;
-import java.util.Stack;
 
 /**
  * This is the main stack on which {@link View} objects can be pushed.
  * @since 1.0.0
  * @see View
  */
-public final class ViewStack {
-    private final static ViewStack instance = new ViewStack();
-    private final Stack<View> stack = new Stack<>();
-    private boolean lock;
+public interface ViewStack {
 
-    public static ViewStack getInstance() {
-        return instance;
+    static ViewStack getInstance() {
+        return ViewStackImpl.INSTANCE;
     }
 
-    public void lock() {
-        this.lock = true;
-    }
+    /**
+     * Returns whether the current {@link View} is a {@link View.Locked} locked to the stack.
+     */
+    boolean isLocked();
 
-    public void unlock() {
-        this.lock = false;
-    }
+    /**
+     * Unlocks the {@link ViewStack} after a {@link View.Locked} was pushed.
+     */
+    void unlock();
 
-    public boolean isLocked() {
-        return this.lock;
-    }
+    /**
+     * Pushes the given {@link View} onto the stack.
+     */
+    void push(View view);
 
-    public void push(View view) {
-        if (isLocked()) {
-            return;
-        }
+    /**
+     * Pops the current {@link View} from the stack.
+     * Returns an empty {@link Optional} if the stack is empty.
+     */
+    Optional<View> pop();
 
-        stack.push(view);
+    /**
+     * Returns the {@link View} currently at the top of the stack.
+     * Returns an empty {@link Optional} if the stack is empty.
+     */
+    Optional<View> peek();
 
-        if (view instanceof LockedView) {
-            this.lock();
-        }
-    }
+    /**
+     * Finds a specific {@link View} within the stack.
+     * Returns an empty {@link Optional} if the stack is empty.
+     */
+    Optional<View> find(View view);
 
-    public Optional<View> pop() {
-        if (stack.size() > 0 && !isLocked()) { // there's at least one container present
-            final var view = stack.pop();
-            return Optional.of(view);
-        }
+    /**
+     * Removes every {@link View} from the stack and returns the camera to the original {@link Camera} object.
+     */
+    void clear();
 
-        return Optional.empty();
-    }
-
-    public Optional<View> peek() {
-        if (stack.size() > 0) {
-            return Optional.of(stack.peek());
-        }
-
-        return Optional.empty();
-    }
-
-    public View find(View viewToFind) {
-        for (var view : stack) {
-            if (view.equals(viewToFind)) {
-                return view;
-            }
-        }
-
-        return null;
-    }
-
-    public void clear() {
-        stack.clear();
-    }
 }

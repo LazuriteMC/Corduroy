@@ -11,11 +11,11 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import org.lwjgl.glfw.GLFW;
 
-public class ExampleMod implements ClientModInitializer {
+public class CorduroyExampleMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         final var m_key = new KeyMapping(
-                "key.corduroy.change_view",
+                "key.corduroy.change_view_1",
                 InputConstants.Type.KEYSYM,
                 GLFW.GLFW_KEY_M,
                 "key.categories.gameplay"
