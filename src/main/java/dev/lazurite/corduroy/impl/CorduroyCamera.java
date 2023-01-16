@@ -43,6 +43,8 @@ public class CorduroyCamera extends Camera {
         this.left.rotate(this.rotation);
         this.xRot = QuaternionUtil.getYaw(this.rotation);
         this.yRot = QuaternionUtil.getPitch(this.rotation);
+
+        view.onRender();
     }
 
     @Override
