@@ -7,7 +7,6 @@
     "GameRendererMixin",
     "GuiMixin",
     "KeyboardInputMixin",
-    "LevelRendererMixin",
     "LivingEntityMixin",
     "MinecraftMixin",
     "MouseHandlerMixin"
